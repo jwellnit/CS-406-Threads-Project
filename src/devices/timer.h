@@ -3,7 +3,6 @@
 
 #include <round.h>
 #include <stdint.h>
-#include "threads/synch.h"
 
 /* Number of timer interrupts per second. */
 #define TIMER_FREQ 100
@@ -26,14 +25,6 @@ void timer_udelay (int64_t microseconds);
 void timer_ndelay (int64_t nanoseconds);
 
 void timer_print_stats (void);
-
-/* alarm. */
-struct alarm
-{
-  struct semaphore sema;      /* semaphore to signal a waiting thread */
-  int64_t end;                /* Duration of the timer */
-  struct list_elem elem;      /* elem for alarmList */
-};
 
 struct list alarmList;
 

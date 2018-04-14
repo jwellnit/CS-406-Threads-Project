@@ -7,6 +7,7 @@
 #include "threads/interrupt.h"
 #include "threads/synch.h"
 #include "threads/thread.h"
+#include "threads/synch.h"
 
 /* See [8254] for hardware details of the 8254 timer chip. */
 
@@ -99,7 +100,7 @@ timer_sleep (int64_t ticks)
   al.end = timer_ticks () + ticks;
 
   struct semaphore s;
-  sema_init(s, 0);
+  sema_init(*s, 0);
   al.sema = s;
 
   list.list_insert_ordered(alarmList, &al.elem, alarm_first, NULL);
