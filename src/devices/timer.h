@@ -29,7 +29,7 @@ void timer_print_stats (void);
 /* alarm. */
 struct alarm
   {
-    struct semaphore sema       /* semaphore to signal a waiting thread */
+    struct semaphore sema;       /* semaphore to signal a waiting thread */
     int64_t end;                /* Duration of the timer */
     struct list_elem elem;      /* elem for alarmList */
   };
