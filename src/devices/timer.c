@@ -96,22 +96,16 @@ timer_sleep (int64_t ticks)
   //   thread_yield ();
 
   struct alarm al;
-  al.ticks = ticks;
-  al.start = timer_ticks ();
+  al.end = timer_ticks () + ticks;
 
-  struct lock l;
-  lock_init(l);
-  struct condition c;
-  cond_init(c);
-  al.lock = l;
-  al.lock = c;
+  struct semaphore s;
+  sema_init(s, 0);
+  al.sema = s;
 
   list.list_insert_ordered(alarmList, &al.elem, alarm_first, NULL);
 
   ASSERT (intr_get_level () == INTR_ON);
-  lock_acquire(l);
-  cond_wait(c, l);
-  lock_release(l);
+  sema_down(s);
 
 }
 
@@ -195,7 +189,12 @@ timer_interrupt (struct intr_frame *args UNUSED)
   /** POTENTIAL SOLUTION
   check here on the condition variable for each alarm
   */
-
+  struct alarm next = list_head(alarmList), alarm, elem);
+  while (next->end <= timer_ticks()) {
+    sema_up(next->sema);
+    list_pop_front(alarmList);
+    next = list_head(alarmList), alarm, elem);
+  }
 
 }
 
@@ -279,5 +278,5 @@ alarm_first (const struct list_elem *a_, const struct list_elem *b_,
   const struct alarm *a = list_entry (a_, struct alarm, elem);
   const struct alarm *b = list_entry (b_, struct alarm, elem);
 
-  return (a->ticks+a->start) < (b->ticks+b->start);
+  return (a->end) < (b->end);
 }

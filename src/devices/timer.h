@@ -29,10 +29,8 @@ void timer_print_stats (void);
 /* alarm. */
 struct alarm
   {
-    struct lock condLock        /* Lock that must be acquired for the condition variable */
-    struct condition alarmCond  /* Condition variable to signal waiting threads */
-    int64_t start;              /* Start time of the timer */
-    int64_t ticks;              /* Duration of the timer */
+    struct semaphore sema       /* semaphore to signal a waiting thread */
+    int64_t end;                /* Duration of the timer */
     struct list_elem elem;      /* elem for alarmList */
   };
 
