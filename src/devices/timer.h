@@ -29,7 +29,4 @@ void timer_print_stats (void);
 
 struct list alarmList;
 
-static bool alarm_first (const struct list_elem *, const struct list_elem *,
-                        void *);
-
 #endif /* devices/timer.h */
