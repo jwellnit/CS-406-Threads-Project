@@ -194,11 +194,13 @@ timer_interrupt (struct intr_frame *args UNUSED)
   /** POTENTIAL SOLUTION
   check here on the condition variable for each alarm
   */
-  struct alarm *next = list_entry(list_front(&alarmList), struct alarm, elem);
-  while (next->end <= timer_ticks()) {
-    sema_up(&next->sema);
-    list_pop_front(&alarmList);
-    next = list_entry(list_front(&alarmList), struct alarm, elem);
+  if (!list_empty(alarmList)){
+    struct alarm *next = list_entry(list_front(&alarmList), struct alarm, elem);
+    while (next->end <= timer_ticks()) {
+      sema_up(&next->sema);
+      list_pop_front(&alarmList);
+      next = list_entry(list_front(&alarmList), struct alarm, elem);
+    }
   }
 
 }
