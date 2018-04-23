@@ -21,6 +21,9 @@
 /* Number of timer ticks since OS booted. */
 static int64_t ticks;
 
+// alarmList lock
+struct lock alLock;
+
 /* Number of loops per timer tick.
    Initialized by timer_calibrate(). */
 static unsigned loops_per_tick;
@@ -42,6 +45,7 @@ timer_init (void)
   pit_configure_channel (0, 2, TIMER_FREQ);
   intr_register_ext (0x20, timer_interrupt, "8254 Timer");
   list_init(&alarmList);
+  lock_init(&alLock);
 }
 
 /* Calibrates loops_per_tick, used to implement brief delays. */
@@ -107,7 +111,11 @@ timer_sleep (int64_t ticks)
   sema_init(&s, 0);
   al.sema = s;
 
+  intr_disable();
+  lock_acquire(&alLock);
   list_insert_ordered(&alarmList, &al.elem, alarm_first, NULL);
+  lock_release($alLock);
+  intr_enable();
 
   ASSERT (intr_get_level () == INTR_ON);
   sema_down(&s);
@@ -194,6 +202,7 @@ timer_interrupt (struct intr_frame *args UNUSED)
   /** POTENTIAL SOLUTION
   check here on the condition variable for each alarm
   */
+
   while (!list_empty(&alarmList)){
     struct alarm *next = list_entry(list_front(&alarmList), struct alarm, elem);
     if (next->end <= timer_ticks()) {
