@@ -44,9 +44,9 @@ void cond_broadcast (struct condition *, struct lock *);
 /* alarm. */
 struct alarm
 {
+  struct list_elem elem;      /* elem for alarmList */
   struct semaphore sema;      /* semaphore to signal a waiting thread */
   int64_t end;                /* Duration of the timer */
-  struct list_elem elem;      /* elem for alarmList */
 };
 
 /* Optimization barrier.
