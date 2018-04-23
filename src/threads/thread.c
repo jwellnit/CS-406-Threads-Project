@@ -496,8 +496,55 @@ next_thread_to_run (void)
   if (list_empty (&ready_list))
     return idle_thread;
   else
-    return list_entry (list_pop_front (&ready_list), struct thread, elem);
+    list_sort(*ready_list, priority_sort *less, void *aux);
+    return list_entry (list_pop_back (&ready_list), struct thread, elem); //changed from list_pop_front
 }
+
+/*
+This is a helper method need by the list_sort method found within the lib/kernel directory.
+The method looks at two different threads and returns true is the priority of thread a is less then 
+the priority of thread b.  Otherwise the method will return false.
+*/
+
+static bool
+priority_sort (const struct list_elem *a_, const struct list_elem *b_,
+            void *aux UNUSED)
+{
+  const struct thread *a = list_entry (a_, struct thread, elem);
+  const struct thread *b = list_entry (b_, struct thread, elem);
+
+  return (a->thread_get_priority()) < (b->thread_get_priority());
+}//end of priority_sort
+
+/*
+	This method is used to determine if a thread was able to aquire a lock.
+	It will return true if the thread gets the lock and false if it cannot aquire lock.
+	This method uses the helper method priority_donate.  Mostly needs to be changed
+*/
+static bool thread_get_lock (lock *lock){
+	if (lock_try_aquire(lock) == true){
+		return true;
+	}//end of if
+	else{
+		new thread *temp = lock->holder;
+		int prev_pri = temp->get_priority();
+		priority_donate(temp, thread_get_priorty()); //???
+		return false;
+	}//end of else
+		
+}//end of thread_get_lock
+
+//??????
+/*
+	This is a helper method.  Needs more work.
+*/
+void priority_donate(struct thread, int priority){
+	
+	thread.thread_set_priority(priority);
+	
+	list_sort(*ready_list, priority_sort *less, void *aux);
+	
+}//end of priority_donate 
 
 /* Completes a thread switch by activating the new thread's page
    tables, and, if the previous thread is dying, destroying it.
