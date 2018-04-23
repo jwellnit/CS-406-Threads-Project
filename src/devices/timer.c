@@ -104,21 +104,19 @@ timer_sleep (int64_t ticks)
   // while (timer_elapsed (start) < ticks)
   //   thread_yield ();
 
-  struct alarm al;
-  al.end = timer_ticks () + ticks;
+  struct alarm *al = malloc (sizeof(struct alarm));
+  al->end = timer_ticks () + ticks;
 
-  struct semaphore s;
-  sema_init(&s, 0);
-  al.sema = s;
+  sema_init(&(al->sema), 0);
 
   intr_disable();
   lock_acquire(&alLock);
-  list_insert_ordered(&alarmList, &al.elem, alarm_first, NULL);
+  list_insert_ordered(&alarmList, &(al->elem), alarm_first, NULL);
   lock_release(&alLock);
   intr_enable();
 
   ASSERT (intr_get_level () == INTR_ON);
-  sema_down(&s);
+  sema_down(&(al->sema));
 
 }
 
@@ -206,7 +204,7 @@ timer_interrupt (struct intr_frame *args UNUSED)
   while (!list_empty(&alarmList)){
     struct alarm *next = list_entry(list_front(&alarmList), struct alarm, elem);
     if (next->end <= timer_ticks()) {
-       sema_up(&next->sema);
+       sema_up(&(next->sema));
        list_pop_front(&alarmList);
     } else {
      break;
