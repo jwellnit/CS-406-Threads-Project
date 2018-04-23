@@ -202,7 +202,7 @@ timer_interrupt (struct intr_frame *args UNUSED)
   /** POTENTIAL SOLUTION
   check here on the condition variable for each alarm
   */
-  intr_level prv = intr_set_level(INTR_OFF);
+  enum intr_level prv = intr_set_level(INTR_OFF);
   while (!list_empty(&alarmList)){
     struct alarm *next = list_entry(list_front(&alarmList), struct alarm, elem);
     if (next->end <= timer_ticks()) {
