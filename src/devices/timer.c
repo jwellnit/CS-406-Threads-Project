@@ -206,12 +206,11 @@ timer_interrupt (struct intr_frame *args UNUSED)
   while (!list_empty(&alarmList)){
     struct alarm *next = list_entry(list_front(&alarmList), struct alarm, elem);
     // if (next->end <= timer_ticks()) {
-    //   sema_up(&next->sema);
-    //   list_pop_front(&alarmList);
+       sema_up(&next->sema);
+       list_pop_front(&alarmList);
     // } else {
     //   break;
     // }
-    list_pop_front(&alarmList);
   }
 
 }
