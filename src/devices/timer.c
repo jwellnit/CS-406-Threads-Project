@@ -114,7 +114,7 @@ timer_sleep (int64_t ticks)
   intr_disable();
   lock_acquire(&alLock);
   list_insert_ordered(&alarmList, &al.elem, alarm_first, NULL);
-  lock_release($alLock);
+  lock_release(&alLock);
   intr_enable();
 
   ASSERT (intr_get_level () == INTR_ON);
