@@ -99,6 +99,10 @@ shutdown_power_off (void)
   printf ("Powering off...\n");
   serial_flush ();
 
+  /* Fix powering off in QEMU */
+
+ outw(0x604, 0x0 | 0x2000);
+
   /* This is a special power-off sequence supported by Bochs and
      QEMU, but not by physical hardware. */
   for (p = s; *p != '\0'; p++)
