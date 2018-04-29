@@ -116,6 +116,7 @@ thread_start (void)
 
   /* Wait for the idle thread to initialize idle_thread. */
   sema_down (&idle_started);
+  thread_yield(); //added 
 }
 
 /* Called by the timer interrupt handler at each timer tick.
@@ -347,6 +348,7 @@ void
 thread_set_priority (int new_priority) 
 {
   thread_current ()->priority = new_priority;
+  list_sort(*ready_list, priority_sort *less, void *aux);		
 }
 
 /* Returns the current thread's priority. */
