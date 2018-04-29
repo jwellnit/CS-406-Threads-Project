@@ -348,7 +348,7 @@ void
 thread_set_priority (int new_priority) 
 {
   thread_current ()->priority = new_priority;
-  list_sort(*ready_list, priority_sort *less, void *aux);		
+  list_sort(&ready_list, priority_sort, NULL);		
 }
 
 /* Returns the current thread's priority. */
@@ -501,7 +501,7 @@ next_thread_to_run (void)
   if (list_empty (&ready_list))
     return idle_thread;
   else
-    list_sort(*ready_list, priority_sort *less, void *aux);
+    list_sort(&ready_list, priority_sort, NULL);
     return list_entry (list_pop_back (&ready_list), struct thread, elem); //changed from list_pop_front
 }
 
@@ -518,7 +518,7 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
   const struct thread *a = list_entry (a_, struct thread, elem);
   const struct thread *b = list_entry (b_, struct thread, elem);
 
-  return (a->thread_get_priority()) < (b->thread_get_priority());
+  return a->priority < b->priority;
 }//end of priority_sort
 
 /*
