@@ -2,6 +2,7 @@
 #define FIXED_POINT_H
 
 #include <stdbool.h>
+#include <stdint.h>
 
 struct fpoint {
   int q;
@@ -11,6 +12,9 @@ struct fpoint {
 
 //sinple exponentiation on integer numbers
 int expi (int base, int exp) {
+  if (exp == 0) {
+    return 1;
+  }
   int ret = base;
   for (int i = 1; i < exp; i++) {
     ret *= base;
@@ -25,7 +29,7 @@ bool fpoint_init (struct fpoint *x, int q, int n) {
     return false;
   }
   x->q = q;
-  x->f = expi.(2, q);
+  x->f = expi(2, q);
   x->v = n*x->f;
   return true;
 }
@@ -45,7 +49,7 @@ int fpoint_to_int_zero (struct fpoint *x) {
 }
 
 //converts fpoint x to an int rounding towards the nearest int
-int fpoint_to_int_zero (struct fpoint *x) {
+int fpoint_to_int_nearest (struct fpoint *x) {
   if (x->v >= 0) {
     return (x->v + (x->f/2))/x->f;
   } else {
@@ -55,7 +59,7 @@ int fpoint_to_int_zero (struct fpoint *x) {
 
 //add two fpoints x and y
 bool fpoint_add (struct fpoint *x, struct fpoint *y, struct fpoint *res) {
-  if (x->q != y->q || x->q !+ res->q) {
+  if (x->q != y->q || x->q != res->q) {
     return false;
   }
   res->v = x->v + y->v;
@@ -64,7 +68,7 @@ bool fpoint_add (struct fpoint *x, struct fpoint *y, struct fpoint *res) {
 
 //subtract two fpoints x-y
 bool fpoint_sub (struct fpoint *x, struct fpoint *y, struct fpoint *res) {
-  if (x->q != y->q || x->q !+ res->q) {
+  if (x->q != y->q || x->q != res->q) {
     return false;
   }
   res->v = x->v - y->v;
@@ -73,7 +77,7 @@ bool fpoint_sub (struct fpoint *x, struct fpoint *y, struct fpoint *res) {
 
 //multiply two fpoints x and y
 bool fpoint_mult (struct fpoint *x, struct fpoint *y, struct fpoint *res) {
-  if (x->q != y->q || x->q !+ res->q) {
+  if (x->q != y->q || x->q != res->q) {
     return false;
   }
   res->v = (int64_t)x->v * y->v / y->f;
@@ -82,7 +86,7 @@ bool fpoint_mult (struct fpoint *x, struct fpoint *y, struct fpoint *res) {
 
 //divide two fpoints x/y
 bool fpoint_div (struct fpoint *x, struct fpoint *y, struct fpoint *res) {
-  if (x->q != y->q || x->q !+ res->q) {
+  if (x->q != y->q || x->q != res->q) {
     return false;
   }
   res->v = (int64_t)x->v * y->f / y->v;
