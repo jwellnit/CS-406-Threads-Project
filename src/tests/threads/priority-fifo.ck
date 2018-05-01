@@ -2,24 +2,24 @@
 
 # The expected output looks like this:
 #
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
-# (priority-fifo) iteration: 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
+# (priority-fifo) iteration: 0 1 2 3 4 5 6 7
 #
-# A different permutation of 0...15 is acceptable, but every line must
+# A different permutation of 0...7 is acceptable, but every line must
 # be in the same order.
 
 use strict;
@@ -31,8 +31,8 @@ my (@output) = read_text_file ("$test.output");
 
 common_checks ("run", @output);
 
-my ($thread_cnt) = 16;
-my ($iter_cnt) = 16;
+my ($thread_cnt) = 8;
+my ($iter_cnt) = 8;
 my (@order);
 my (@t) = (-1) x $thread_cnt;
 
