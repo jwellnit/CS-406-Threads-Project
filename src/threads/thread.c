@@ -343,12 +343,20 @@ thread_foreach (thread_action_func *func, void *aux)
     }
 }
 
-/* Sets the current thread's priority to NEW_PRIORITY. */
+/* Sets the current thread's priority to NEW_PRIORITY.
+ * This method was changed to use a lock when setting the priority of a thread.  
+ * It also uses thread_yield ()
+*/
 void
 thread_set_priority (int new_priority) 
 {
+  enum intr_level old_level;	
+  old_level = intr_disable ();
   thread_current ()->priority = new_priority;
-  list_sort(&ready_list, priority_sort, NULL);		
+  list_sort(&ready_list, priority_sort, NULL);
+  thread_yield();
+  intr_set_level (old_level);
+	
 }
 
 /* Returns the current thread's priority. */
