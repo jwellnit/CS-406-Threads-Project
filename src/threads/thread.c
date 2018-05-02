@@ -150,7 +150,7 @@ thread_print_stats (void)
 }
 
 /* Creates a new kernel thread named NAME with the given initial
-   PRIORITY, which executes FUNCTION passing AUX as the argument,
+   , which executes FUNCTION passing AUX as the argument,
    and adds it to the ready queue.  Returns the thread identifier
    for the new thread, or TID_ERROR if creation fails.
 
@@ -552,14 +552,19 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 void priority_donate(void){
 
         struct thread *cur = thread_current(); //set a current thread
-        struct lock *lock = &tid_lock; //initialize a lock
+       // struct lock *lock = //get the lock
+		//sort the waiting list in sync
 	
-	//find the thread that has the highest priority 
+	
+	int highest = highest_cond_waiting_priority();
+	fprintf(highest);
+	
 	//save its priority
 	//save current's priority
 	//set current's priority to highest priority: save prev_priority as global method in sync called lock_release, maybe we could add an additional parameter
 		//have another method called return prioirty 
 	//when the lock is released... return priority
+		//how do we do that? 
 
         int highest = cur->priority; //take the highest priority from the current thread 
         int lowest = lock->holder->priority; //save the lowest priority 
