@@ -535,7 +535,7 @@ The method looks at two different threads and returns true is the priority of th
 the priority of thread b.  Otherwise the method will return false.
 */
 
-bool
+static bool
 priority_sort (const struct list_elem *a_, const struct list_elem *b_,
             void *aux UNUSED)
 {
@@ -565,7 +565,7 @@ priority_donate(struct lock *lock){
 	
 	
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock 
-		return;
+	
 		//dont need to donate; return success
 	//do we want cur to go on the waiters list
 	}else{
