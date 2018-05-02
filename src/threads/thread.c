@@ -561,7 +561,7 @@ void priority_donate(struct lock *lock){
 	
  	int highest = a->priority; // get the highest priority of the lock's semaphore's waiting list
 	printf("see if this prints");
- 	printf(highest);
+ 	printf(&highest);
 	
 	cur->priority = highest;
 	
