@@ -551,7 +551,7 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 	This method uses the helper method priority_donate.  Mostly needs to be changed
 */
 void 
-priority_donate(struct lock lock*){
+priority_donate(struct lock *lock){
 
 	//lock knows thread 1: the holder
 	//cur thread priority
