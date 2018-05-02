@@ -343,6 +343,9 @@ highest_cond_waiting_priority(struct condition *cond){
 	ASSERT (cond != NULL);
 
 	list_sort(&cond->waiters, priority_sort, NULL); //sort the list
-	return list_front(&cond->waiters)->priority;
+	
+	const struct thread *a = list_entry (list_front(&cond->waiters), struct thread, elem);
+	
+	return a->priority;
 	//return the highest
 }
