@@ -69,7 +69,7 @@ sema_down (struct semaphore *sema)
   old_level = intr_disable ();
   while (sema->value == 0)
     {
-      list_push_back (&sema->waiters, &thread_current ()->elem);
+      list_insert_ordered (&sema->waiters, &thread_current ()->elem, priority_sort, NULL);
       thread_block ();
     }
   sema->value--;
@@ -344,9 +344,9 @@ cond_broadcast (struct condition *cond, struct lock *lock)
 // 	ASSERT (cond != NULL);
 
 // 	list_sort(&cond->waiters, cond_priority_sort, NULL); //sort the list
-	
+
 // 	//const struct thread *a = list_entry(list_front(&cond->waiters), struct thread, elem);
-	
+
 // 	return 0;//a->priority;
 // 	//return the highest
 // }
