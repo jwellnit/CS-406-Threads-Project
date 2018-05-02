@@ -338,24 +338,24 @@ cond_broadcast (struct condition *cond, struct lock *lock)
 }
 
 //should return the highest waiting priority for priority sort
-int
-highest_cond_waiting_priority(struct condition *cond){
-	ASSERT (cond != NULL);
+// int
+// highest_cond_waiting_priority(struct condition *cond){
+// 	ASSERT (cond != NULL);
 
-	list_sort(&cond->waiters, cond_priority_sort, NULL); //sort the list
+// 	list_sort(&cond->waiters, cond_priority_sort, NULL); //sort the list
 	
-	//const struct thread *a = list_entry(list_front(&cond->waiters), struct thread, elem);
+// 	//const struct thread *a = list_entry(list_front(&cond->waiters), struct thread, elem);
 	
-	return 0;//a->priority;
-	//return the highest
-}
+// 	return 0;//a->priority;
+// 	//return the highest
+// }
 
-static bool
-cond_prioirity_sort (const struct list_elem *a_, const struct list_elem *b_,
-            void *aux UNUSED)
-{
-  const struct thread *a = list_entry (a_, struct thread, elem);
-  const struct thread *b = list_entry (b_, struct thread, elem);
+// static bool
+// cond_prioirity_sort (const struct list_elem *a_, const struct list_elem *b_,
+//             void *aux UNUSED)
+// {
+// //   const struct thread *a = list_entry (a_, struct thread, elem);
+// //   const struct thread *b = list_entry (b_, struct thread, elem);
 
-  return a->priority > b->priority;
-}//end of cond_list_sort
+// //   return a->priority > b->priority;
+// }//end of cond_list_sort
