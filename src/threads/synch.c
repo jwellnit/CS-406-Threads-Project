@@ -26,9 +26,8 @@
    MODIFICATIONS.
 */
 
-
-#include "threads/synch.h"
 #include "threads/thread.h"
+#include "threads/synch.h"
 #include <stdio.h>
 #include <string.h>
 #include "threads/interrupt.h"
@@ -70,7 +69,7 @@ sema_down (struct semaphore *sema)
   old_level = intr_disable ();
   while (sema->value == 0)
     {
-      list_insert_ordered (&sema->waiters, &thread_current ()->elem, priority_sort, NULL);
+      list_insert_ordered (&sema->waiters, &thread_current ()->elem, &priority_sort, NULL);
       thread_block ();
     }
   sema->value--;
