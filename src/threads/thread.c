@@ -246,6 +246,7 @@ thread_unblock (struct thread *t)
 {
   enum intr_level old_level;
 
+  debug_backtrace();
   ASSERT (is_thread (t));
 
   old_level = intr_disable ();
@@ -552,22 +553,22 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 	It will return true if the thread gets the lock and false if it cannot aquire lock.
 	This method uses the helper method priority_donate.  Mostly needs to be changed
 */
-void 
+void
 priority_donate(struct lock *lock){
 
 	//lock knows thread 1: the holder
 	//cur thread priority
 	//compare priorities
-	//donate 
-	
+	//donate
+
 	//save original priority
-	//revert when 
-	
+	//revert when
+
         struct thread *cur = thread_current(); //set a current thread
-	
-	
-	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock 
-	
+
+
+	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
+
 		//dont need to donate; return success
 	//do we want cur to go on the waiters list
 	}else{
@@ -578,21 +579,21 @@ priority_donate(struct lock *lock){
 			holder->priority = cur->priority; //donate
 			lock_acquire(lock);
 		}
-		
-		//use a loop not recursion: run through 
-		
+
+		//use a loop not recursion: run through
+
 		// you have lock you have holder(a thread) and you need ot konw which lock thread might be waiting on
 		//waiting on 1 lock at any one time
 		//add to thread ctrl block a point to the lock you're waiting for (wait_for)
 		//then wait_for points to another lock points to another holder
-		
+
         	//list_sort(&lock->semaphore.waiters, priority_sort, NULL); //sort the list of threads waiting on the lock
-	
+
  		//const struct thread *a = list_entry(list_front(&lock->semaphore.waiters), struct thread, elem); //get the waiting thread w/ the highest priority
-	
+
  		//int highest = a->priority; // get the priority of the highest priority thread (based on Frankie's code)
- 		//printf("%d", highest); // try to see it 
-	
+ 		//printf("%d", highest); // try to see it
+
 		//thread_set_priority(highest); // reset the priority
 	}//end of else
 
@@ -602,8 +603,8 @@ priority_donate(struct lock *lock){
 void
 priority_return(struct lock *lock){
 	//set the priority to the old priority
-	//release lock 
-	//return priority 
+	//release lock
+	//return priority
 	lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
 	cur->priority = cur->old_priority;
