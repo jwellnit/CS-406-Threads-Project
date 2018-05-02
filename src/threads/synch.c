@@ -342,22 +342,5 @@ int
 highest_cond_waiting_priority(void){
 	list_sort(&cond->waiters, priority_sort, NULL); //sort the list
 	return list_front(&cond->waiters->priority);
-	//return the highest 
+	//return the highest
 }
-
-
-/*
-This is a helper method need by the list_sort method found within the lib/kernel directory.
-The method looks at two different threads and returns true is the priority of thread a is less then
-the priority of thread b.  Otherwise the method will return false.
-*/
-
-// static bool
-// priority_sort_sync (const struct list_elem *a_, const struct list_elem *b_,
-//             void *aux UNUSED)
-// {
-//   const struct thread *a = list_entry (a_, struct thread, elem);
-//   const struct thread *b = list_entry (b_, struct thread, elem);
-//
-//   return a->priority > b->priority;
-// }//end of priority_sort
