@@ -550,10 +550,14 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 	This method uses the helper method priority_donate.  Mostly needs to be changed
 */
 void priority_donate(struct lock *lock){
+	
+	struct lock* lock;
 
         struct thread *cur = thread_current(); //set a current thread
 	
-	list_sort(&lock->semaphore->waiters, priority_sort, NULL); //sort the list
+	if(&lock->semaphore->waiters != NULL)
+		list_sort(&lock->semaphore->waiters, priority_sort, NULL); //sort the list
+	
 	const struct thread *a = list_entry(list_front(&cond->waiters), struct thread, elem);
 	
 	int highest = a->priority; // get the highest priority of the lock's semaphore's waiting list
