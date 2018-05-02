@@ -561,7 +561,7 @@ void priority_donate(struct lock *lock){
  	const struct thread *a = list_entry(list_front(&lock->semaphore.waiters), struct thread, elem); //get the waiting thread w/ the highest priority
 	
  	int highest = a->priority; // get the priority of the highest priority thread (based on Frankie's code)
- 	printf(&highest); // try to see it 
+ 	printf("%d", &highest); // try to see it 
 	
 	cur->priority = highest; // reset the priority
 	
