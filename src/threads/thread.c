@@ -568,7 +568,7 @@ void priority_donate(struct lock *lock){
 	//do we want cur to go on the waiters list
 	}else{
 		//holder needs to go up
-		struct thread *holder = &lock->holder;
+		struct thread *holder = lock->holder;
 		//use a loop not recursion: run through 
 		
 		// you have lock you have holder(a thread) and you need ot konw which lock thread might be waiting on
