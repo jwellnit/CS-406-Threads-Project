@@ -340,6 +340,8 @@ cond_broadcast (struct condition *cond, struct lock *lock)
 //should return the highest waiting priority for priority sort
 int
 highest_cond_waiting_priority(void){
+	ASSERT (cond != NULL);
+  	ASSERT (lock != NULL)
 
 	list_sort(&cond->waiters, priority_sort, NULL); //sort the list
 	return list_front(&cond->waiters->priority);
