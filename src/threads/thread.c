@@ -552,16 +552,15 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 */
 void priority_donate(struct lock *lock){
 
-
-//         struct thread *cur = thread_current(); //set a current thread
+        struct thread *cur = thread_current(); //set a current thread
 	
-// 	if(&lock->semaphore->waiters != NULL)
-// 		list_sort(&lock->semaphore->waiters, priority_sort, NULL); //sort the list
+ 	if(&lock->semaphore->waiters != NULL)
+ 		list_sort(&lock->semaphore->waiters, priority_sort, NULL); //sort the list
 	
-// 	const struct thread *a = list_entry(list_front(&cond->waiters), struct thread, elem);
+ 	const struct thread *a = list_entry(list_front(&cond->waiters), struct thread, elem);
 	
-// 	int highest = a->priority; // get the highest priority of the lock's semaphore's waiting list
-// 	printf(highest);
+ 	int highest = a->priority; // get the highest priority of the lock's semaphore's waiting list
+ 	printf(highest);
 	
 	//save its priority
 	//save current's priority
