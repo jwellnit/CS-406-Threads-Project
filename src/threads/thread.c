@@ -553,7 +553,7 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 void priority_donate(struct lock *lock){
 
         struct thread *cur = thread_current(); //set a current thread
-	//lock_try_acquire(lock); //current thread tries to acquire the lock
+	cur->lock_try_acquire(lock); //current thread tries to acquire the lock
 	
  	if(list_empty(&lock->semaphore.waiters)) 
  		list_sort(&lock->semaphore.waiters, priority_sort, NULL); //sort the list of threads waiting on the lock
