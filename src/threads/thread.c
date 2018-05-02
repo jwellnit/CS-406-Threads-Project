@@ -549,18 +549,14 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 	It will return true if the thread gets the lock and false if it cannot aquire lock.
 	This method uses the helper method priority_donate.  Mostly needs to be changed
 */
-void priority_donate(void){
+void priority_donate(lock *lock){
 
         struct thread *cur = thread_current(); //set a current thread
-        struct lock *lock; //get the lock
-		//sort the waiting list in sync
-	lock_try_acquire(&lock);
-
-         struct condition* cond;
-	 cond_init(&cond);
 	
+	list_sort(&lock->semaphore->waiters, priority_sort, NULL); //sort the list
+	const struct thread *a = list_entry(list_front(&cond->waiters), struct thread, elem);
 	
-	int highest = highest_cond_waiting_priority(cond);
+	int highest = a->priority; // get the highest priority of the lock's semaphore's waiting list
 	printf(highest);
 	
 	//save its priority
