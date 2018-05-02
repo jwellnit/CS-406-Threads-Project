@@ -553,7 +553,7 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 void priority_donate(struct lock *lock){
 
         struct thread *cur = thread_current(); //set a current thread
-	lock_try_acquire(&cur); //current thread tries to acquire the lock
+	lock_try_acquire(lock); //current thread tries to acquire the lock
 	
  	if(list_empty(&lock->semaphore.waiters)) 
  		list_sort(&lock->semaphore.waiters, priority_sort, NULL); //sort the list of threads waiting on the lock
@@ -561,7 +561,7 @@ void priority_donate(struct lock *lock){
  	const struct thread *a = list_entry(list_front(&lock->semaphore.waiters), struct thread, elem); //get the waiting thread w/ the highest priority
 	
  	int highest = a->priority; // get the priority of the highest priority thread (based on Frankie's code)
- 	printf(highest); // try to see it 
+ 	printf(&highest); // try to see it 
 	
 	cur->priority = highest; // reset the priority
 	
