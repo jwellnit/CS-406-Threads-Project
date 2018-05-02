@@ -351,7 +351,7 @@ highest_cond_waiting_priority(struct condition *cond){
 }
 
 static bool
-cond_prioirity_sort (const struct list_elem *a_, const struct list_elem *b_)
+cond_prioirity_sort (const struct list_elem *a_, const struct list_elem *b_, void *aux UNUSED)
 {
   const struct thread *a = list_entry (a_, struct thread, elem);
   const struct thread *b = list_entry (b_, struct thread, elem);
