@@ -339,6 +339,14 @@ cond_broadcast (struct condition *cond, struct lock *lock)
     cond_signal (cond, lock);
 }
 
+//should return the highest waiting priority for priority sort
+int
+highest_cond_waiting_priority(void){
+	list_sort(&cond->waiters, priority_sort, NULL); //sort the list
+	return list_front(&cond->waiters->priority);
+	//return the highest 
+}
+
 
 /*
 This is a helper method need by the list_sort method found within the lib/kernel directory.
