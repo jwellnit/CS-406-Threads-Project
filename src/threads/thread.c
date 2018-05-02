@@ -555,8 +555,12 @@ void priority_donate(void){
         struct lock *lock; //get the lock
 		//sort the waiting list in sync
 	lock_try_acquire(&lock);
+
+         struct condition* cond;
+	 cond_init(&cond);
 	
-	int highest = highest_cond_waiting_priority();
+	
+	int highest = highest_cond_waiting_priority(cond);
 	printf(highest);
 	
 	//save its priority
