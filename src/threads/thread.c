@@ -563,7 +563,8 @@ void priority_donate(struct lock *lock){
  	int highest = a->priority; // get the priority of the highest priority thread (based on Frankie's code)
  	printf("%d", highest); // try to see it 
 	
-	cur->priority = highest; // reset the priority}
+	cur->priority = highest; // reset the priority
+	}
 	
 	//save its priority
 	//save current's priority
