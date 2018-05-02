@@ -535,7 +535,7 @@ The method looks at two different threads and returns true is the priority of th
 the priority of thread b.  Otherwise the method will return false.
 */
 
-static bool
+bool
 priority_sort (const struct list_elem *a_, const struct list_elem *b_,
             void *aux UNUSED)
 {
@@ -550,7 +550,8 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 	It will return true if the thread gets the lock and false if it cannot aquire lock.
 	This method uses the helper method priority_donate.  Mostly needs to be changed
 */
-void priority_donate(struct lock *lock){
+void 
+priority_donate(struct lock *lock){
 
 	//lock knows thread 1: the holder
 	//cur thread priority
