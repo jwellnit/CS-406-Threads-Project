@@ -555,39 +555,14 @@ void priority_donate(struct lock *lock){
         struct thread *cur = thread_current(); //set a current thread
 	lock_try_acquire(lock); //current thread tries to acquire the lock
 	
- 	if(list_empty(&lock->semaphore.waiters)) {//check if waiters exists
- 		list_sort(&lock->semaphore.waiters, priority_sort, NULL); //sort the list of threads waiting on the lock
+        list_sort(&lock->semaphore.waiters, priority_sort, NULL); //sort the list of threads waiting on the lock
 	
  	const struct thread *a = list_entry(list_front(&lock->semaphore.waiters), struct thread, elem); //get the waiting thread w/ the highest priority
 	
  	int highest = a->priority; // get the priority of the highest priority thread (based on Frankie's code)
  	printf("%d", highest); // try to see it 
 	
-	cur->priority = highest; // reset the priority
-	}
-	
-	//save its priority
-	//save current's priority
-	//set current's priority to highest priority: save prev_priority as global method in sync called lock_release, maybe we could add an additional parameter
-		//have another method called return prioirty 
-	//when the lock is released... return priority
-		//how do we do that? 
-
-//         int highest = cur->priority; //take the highest priority from the current thread 
-//         int lowest = lock->holder->priority; //save the lowest priority 
-
-//         set_priority(highest, lock->holder);
-//         set_priority(lowest, cur);
-//         thread_yield();
-
-// //signal on lock release
-//         size_t n = 0;
-//         struct condition lock_released;
-//         while(n == 0){
-//         cond_wait(&lock_released, &lock);
-
-//         }//end of while
-
+	cur->thread_set_priority(highest); // reset the priority
 
 }//end of priority_donate
 
