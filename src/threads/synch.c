@@ -342,9 +342,9 @@ int
 highest_cond_waiting_priority(struct condition *cond){
 	ASSERT (cond != NULL);
 
-	list_sort(&cond->waiters, cond_priority_sort, NULL); //sort the list
+	list_sort(&cond->waiters, cond_priority_sort); //sort the list
 	
-	const struct thread *a = list_entry (list_front(&cond->waiters), struct thread, elem);
+	const struct thread *a = list_entry(list_front(&cond->waiters), struct thread, elem);
 	
 	return a->priority;
 	//return the highest
