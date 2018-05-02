@@ -43,7 +43,7 @@ void cond_wait (struct condition *, struct lock *);
 void cond_signal (struct condition *, struct lock *);
 void cond_broadcast (struct condition *, struct lock *);
 
-int highest_cond_waiting_priority(void); //added for priority donation
+int highest_cond_waiting_priority(struct condition *cond); //added for priority donation
 
 /* alarm. */
 struct alarm
