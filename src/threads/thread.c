@@ -557,7 +557,7 @@ void priority_donate(struct lock *lock){
  	if(list_empty(&lock->semaphore.waiters))
  		list_sort(&lock->semaphore.waiters, priority_sort, NULL); //sort the list
 	
- 	//const struct thread *a = list_entry(list_front(&cond->waiters), struct thread, elem);
+ 	const struct thread *a = list_entry(list_front(&lock->semaphore.waiters), struct thread, elem);
 	
  	//int highest = a->priority; // get the highest priority of the lock's semaphore's waiting list
  	//printf(highest);
@@ -669,7 +669,7 @@ allocate_tid (void)
 
   return tid;
 }
-
+
 /* Offset of `stack' member within `struct thread'.
    Used by switch.S, which can't figure it out on its own. */
 uint32_t thread_stack_ofs = offsetof (struct thread, stack);
