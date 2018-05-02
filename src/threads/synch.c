@@ -9,7 +9,7 @@
    and its documentation for any purpose, without fee, and
    without written agreement is hereby granted, provided that the
    above copyright notice and the following two paragraphs appear
-   in all copies of this software.
+   in all copies of this software.int highest_cond_waiting_priority(void);
 
    IN NO EVENT SHALL THE UNIVERSITY OF CALIFORNIA BE LIABLE TO
    ANY PARTY FOR DIRECT, INDIRECT, SPECIAL, INCIDENTAL, OR
@@ -340,6 +340,7 @@ cond_broadcast (struct condition *cond, struct lock *lock)
 //should return the highest waiting priority for priority sort
 int
 highest_cond_waiting_priority(void){
+
 	list_sort(&cond->waiters, priority_sort, NULL); //sort the list
 	return list_front(&cond->waiters->priority);
 	//return the highest
