@@ -554,8 +554,8 @@ void priority_donate(struct lock *lock){
 
         struct thread *cur = thread_current(); //set a current thread
 	
- 	if(&lock->semaphore->waiters != NULL)
- 		list_sort(&lock->semaphore->waiters, priority_sort, NULL); //sort the list
+ 	if(list_empty(&lock->semaphore->waiters))
+ 		list_sort(&lock->semaphore, priority_sort, NULL); //sort the list
 	
  	const struct thread *a = list_entry(list_front(&cond->waiters), struct thread, elem);
 	
