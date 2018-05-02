@@ -563,6 +563,8 @@ void priority_donate(struct lock *lock){
 	printf("see if this prints");
  	printf(highest);
 	
+	cur->priority = highest;
+	
 	//save its priority
 	//save current's priority
 	//set current's priority to highest priority: save prev_priority as global method in sync called lock_release, maybe we could add an additional parameter
