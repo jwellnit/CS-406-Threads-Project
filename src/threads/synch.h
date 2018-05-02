@@ -43,9 +43,9 @@ void cond_wait (struct condition *, struct lock *);
 void cond_signal (struct condition *, struct lock *);
 void cond_broadcast (struct condition *, struct lock *);
 
-static bool cond_priority_sort (const struct list_elem *a_, 
-                           const struct list_elem *b_,void *aux UNUSED); //added to sort 
-int highest_cond_waiting_priority(struct condition *cond); //added for priority donation
+//static bool cond_priority_sort (const struct list_elem *a_, 
+//                           const struct list_elem *b_,void *aux UNUSED); //added to sort 
+//int highest_cond_waiting_priority(struct condition *cond); //added for priority donation
 
 
 /* alarm. */
