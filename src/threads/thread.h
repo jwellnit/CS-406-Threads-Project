@@ -138,7 +138,7 @@ int thread_get_nice (void);
 void thread_set_nice (int);
 int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
-bool priority_sort (const struct list_elem *a_, const struct list_elem *b_, void *aux UNUSED); //added
+static bool priority_sort (const struct list_elem *a_, const struct list_elem *b_, void *aux UNUSED); //added
 //static bool thread_get_lock (void);                                                                   //added
 void priority_donate(struct lock*);                                                                          //added
 
