@@ -557,7 +557,7 @@ void priority_donate(void){
 	
 	
 	int highest = highest_cond_waiting_priority();
-	fprintf(highest);
+	printf(highest);
 	
 	//save its priority
 	//save current's priority
