@@ -551,11 +551,18 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 */
 void priority_donate(void){
 
-        struct thread *cur = thread_current();
-        struct lock *lock = &tid_lock;
+        struct thread *cur = thread_current(); //set a current thread
+        struct lock *lock = &tid_lock; //initialize a lock
+	
+	//find the thread that has the highest priority 
+	//save its priority
+	//save current's priority
+	//set current's priority to highest priority: save prev_priority as global method in sync called lock_release, maybe we could add an additional parameter
+		//have another method called return prioirty 
+	//when the lock is released... return priority
 
-        int highest = cur->priority;
-        int lowest = lock->holder->priority;
+        int highest = cur->priority; //take the highest priority from the current thread 
+        int lowest = lock->holder->priority; //save the lowest priority 
 
         set_priority(highest, lock->holder);
         set_priority(lowest, cur);
