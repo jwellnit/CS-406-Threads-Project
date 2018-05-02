@@ -1,0 +1,12 @@
+
+src/devices/\.DS_Store
+
+src/threads/build/threads/kernel\.lds\.s
+
+src/threads/\.DS_Store
+
+src/\.DS_Store
+
+\.DS_Store
+
+src/threads/build/Makefile
