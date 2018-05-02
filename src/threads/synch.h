@@ -30,7 +30,7 @@ bool lock_try_acquire (struct lock *);
 void lock_release (struct lock *);
 bool lock_held_by_current_thread (const struct lock *);
 
-int highest_cond_waiting_priority(void); //added for priority donation
+
 
 /* Condition variable. */
 struct condition
@@ -42,6 +42,8 @@ void cond_init (struct condition *);
 void cond_wait (struct condition *, struct lock *);
 void cond_signal (struct condition *, struct lock *);
 void cond_broadcast (struct condition *, struct lock *);
+
+int highest_cond_waiting_priority(void); //added for priority donation
 
 /* alarm. */
 struct alarm
