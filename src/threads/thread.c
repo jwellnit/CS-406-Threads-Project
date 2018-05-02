@@ -1,4 +1,4 @@
-#include "threads/synch.h"
+//#include "threads/synch.h"
 #include "threads/thread.h"
 #include <debug.h>
 #include <stddef.h>
