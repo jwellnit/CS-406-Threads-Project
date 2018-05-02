@@ -552,9 +552,9 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 void priority_donate(void){
 
         struct thread *cur = thread_current(); //set a current thread
-       // struct lock *lock = //get the lock
+        struct lock *lock; //get the lock
 		//sort the waiting list in sync
-	
+	lock_try_acquire(&lock);
 	
 	int highest = highest_cond_waiting_priority();
 	printf(highest);
