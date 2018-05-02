@@ -606,7 +606,7 @@ priority_return(struct lock *lock){
 	//return priority 
 	lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
-	cur->priority = old_priority;
+	cur->priority = cur->old_priority;
 }
 
 /* Completes a thread switch by activating the new thread's page
