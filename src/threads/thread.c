@@ -549,7 +549,7 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 	It will return true if the thread gets the lock and false if it cannot aquire lock.
 	This method uses the helper method priority_donate.  Mostly needs to be changed
 */
-void priority_donate(lock *lock){
+void priority_donate(struct lock *lock){
 
         struct thread *cur = thread_current(); //set a current thread
 	
