@@ -49,6 +49,8 @@ struct alarm
   int64_t end;                /* Duration of the timer */
 };
 
+static bool priority_sort_sync (const struct list_elem *a_, const struct list_elem *b_, void *aux UNUSED); //added
+
 /* Optimization barrier.
 
    The compiler will not reorder operations across an
