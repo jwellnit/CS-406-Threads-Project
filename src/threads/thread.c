@@ -566,20 +566,20 @@ void priority_donate(void){
 	//when the lock is released... return priority
 		//how do we do that? 
 
-        int highest = cur->priority; //take the highest priority from the current thread 
-        int lowest = lock->holder->priority; //save the lowest priority 
+//         int highest = cur->priority; //take the highest priority from the current thread 
+//         int lowest = lock->holder->priority; //save the lowest priority 
 
-        set_priority(highest, lock->holder);
-        set_priority(lowest, cur);
-        thread_yield();
+//         set_priority(highest, lock->holder);
+//         set_priority(lowest, cur);
+//         thread_yield();
 
-//signal on lock release
-        size_t n = 0;
-        struct condition lock_released;
-        while(n == 0){
-        cond_wait(&lock_released, &lock);
+// //signal on lock release
+//         size_t n = 0;
+//         struct condition lock_released;
+//         while(n == 0){
+//         cond_wait(&lock_released, &lock);
 
-        }//end of while
+//         }//end of while
 
 
 }//end of priority_donate
