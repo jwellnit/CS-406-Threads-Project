@@ -31,7 +31,6 @@
 #include <string.h>
 #include "threads/interrupt.h"
 #include "threads/thread.h"
-#include "threads/thread.c"
 
 /* Initializes semaphore SEMA to VALUE.  A semaphore is a
    nonnegative integer along with two atomic operators for
@@ -343,10 +342,20 @@ int
 highest_cond_waiting_priority(struct condition *cond){
 	ASSERT (cond != NULL);
 
-	list_sort(&cond->waiters, priority_sort, NULL); //sort the list
+	list_sort(&cond->waiters, cond_priority_sort, NULL); //sort the list
 	
 	const struct thread *a = list_entry (list_front(&cond->waiters), struct thread, elem);
 	
 	return a->priority;
 	//return the highest
 }
+
+static bool
+cond_prioirity_sort (const struct list_elem *a_, const struct list_elem *b_,
+            void *aux UNUSED)
+{
+  const struct thread *a = list_entry (a_, struct thread, elem);
+  const struct thread *b = list_entry (b_, struct thread, elem);
+
+  return a->priority > b->priority;
+}//end of cond_list_sort
