@@ -369,6 +369,7 @@ set_priority (int new_priority, struct thread *thread)
 {
   enum intr_level old_level;
   old_level = intr_disable ();
+  thread->old_priority = new_priority;
   thread->priority = new_priority;
   list_sort(&ready_list, priority_sort, NULL);
   intr_set_level (old_level);
@@ -496,6 +497,7 @@ init_thread (struct thread *t, const char *name, int priority)
   t->status = THREAD_BLOCKED;
   strlcpy (t->name, name, sizeof t->name);
   t->stack = (uint8_t *) t + PGSIZE;
+  t->old_priority = priority;
   t->priority = priority;
   t->magic = THREAD_MAGIC;
   list_push_back (&all_list, &t->allelem);
@@ -570,10 +572,12 @@ priority_donate(struct lock *lock){
 	//do we want cur to go on the waiters list
 	}else{
 		//holder needs to go up
-		struct thread *holder = lock->holder;
-		if(holder->priority < cur->priority)
-			holder->old_priority = holder->priority;
+		//disable interrupts here
+		struct thread *holder = lock->holder; //check holder not 0
+		if(holder->priority < cur->priority){
 			holder->priority = cur->priority; //donate
+			lock_acquire(lock);
+		}
 		
 		//use a loop not recursion: run through 
 		
@@ -593,6 +597,17 @@ priority_donate(struct lock *lock){
 	}//end of else
 
 }//end of priority_donate
+
+/* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
+void
+priority_return(struct lock *lock){
+	//set the priority to the old priority
+	//release lock 
+	//return priority 
+	lock_release(lock);
+	struct thread *cur = thread_current(); //set a current thread
+	cur->priority = old_priority;
+}
 
 /* Completes a thread switch by activating the new thread's page
    tables, and, if the previous thread is dying, destroying it.
