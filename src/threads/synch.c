@@ -114,7 +114,7 @@ sema_up (struct semaphore *sema)
 
   old_level = intr_disable ();
   if (!list_empty (&sema->waiters))
-    list_sort(&sema->waiters, priority_sort_sync, NULL);
+    //list_sort(&sema->waiters, priority_sort_sync, NULL);
     thread_unblock (list_entry (list_pop_front (&sema->waiters),
                                 struct thread, elem));
   sema->value++;
@@ -346,12 +346,12 @@ The method looks at two different threads and returns true is the priority of th
 the priority of thread b.  Otherwise the method will return false.
 */
 
-static bool
-priority_sort_sync (const struct list_elem *a_, const struct list_elem *b_,
-            void *aux UNUSED)
-{
-  const struct thread *a = list_entry (a_, struct thread, elem);
-  const struct thread *b = list_entry (b_, struct thread, elem);
-
-  return a->priority > b->priority;
-}//end of priority_sort
+// static bool
+// priority_sort_sync (const struct list_elem *a_, const struct list_elem *b_,
+//             void *aux UNUSED)
+// {
+//   const struct thread *a = list_entry (a_, struct thread, elem);
+//   const struct thread *b = list_entry (b_, struct thread, elem);
+//
+//   return a->priority > b->priority;
+// }//end of priority_sort
