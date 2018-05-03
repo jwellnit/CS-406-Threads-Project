@@ -225,7 +225,10 @@ lock_acquire (struct lock *lock)
   if(lock->holder == NULL){
 	lock_acquire_int(lock);
   }else{
-        priority_donate(lock);
+	enum intr_level old_level;
+	old_level = intr_disable ();
+        	priority_donate(lock);
+	intr_set_level (old_level);
   }
 }
 
