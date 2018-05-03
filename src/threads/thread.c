@@ -591,7 +591,7 @@ priority_donate(struct lock *lock){
                 else{//what if its smaller
                         while(!lock_try_acquire(lock));
 
-                }
+                
 		//use a loop not recursion: run through 
 		
 		// you have lock you have holder(a thread) and you need ot konw which lock thread might be waiting on
