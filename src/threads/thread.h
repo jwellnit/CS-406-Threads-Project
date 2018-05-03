@@ -143,5 +143,6 @@ static bool priority_sort (const struct list_elem *a_, const struct list_elem *b
 //static bool thread_get_lock (void);                                                                   //added
 void priority_donate(struct lock *lock); //added
 void priority_return(struct lock *lock); //added
+void set_priority (int new_priority, struct thread *thread);
 
 #endif /* threads/thread.h */
