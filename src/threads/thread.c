@@ -219,7 +219,7 @@ thread_create (const char *name, int priority,
   thread_unblock (t);
 
   thread_yield(); //added this
-	priority_donate(&aux);
+	priority_donate(aux);
   return tid;
 }
 
