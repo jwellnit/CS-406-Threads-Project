@@ -219,7 +219,7 @@ thread_create (const char *name, int priority,
   thread_unblock (t);
 
   thread_yield(); //added this
-
+	priority_donate(&aux);
   return tid;
 }
 
@@ -574,7 +574,7 @@ priority_donate(struct lock *lock){
 
 
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
-
+			return;
 		//dont need to donate; return success
 	
 	}else{
@@ -582,6 +582,7 @@ priority_donate(struct lock *lock){
 		struct thread *holder = lock->holder; 
 		
 		if(holder == 0) //check holder not 0
+			return;
 			//exit;
 			
 		if(holder->priority < cur->priority){
