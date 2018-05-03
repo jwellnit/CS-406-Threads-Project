@@ -28,6 +28,8 @@ static struct list ready_list;
 /* List of all processes.  Processes are added to this list
    when they are first scheduled and removed when they exit. */
 static struct list all_list;
+/* lock list */
+static struct list lock_list;
 
 /* Idle thread. */
 static struct thread *idle_thread;
@@ -94,6 +96,7 @@ thread_init (void)
   lock_init (&tid_lock);
   list_init (&ready_list);
   list_init (&all_list);
+  list_init (&lock_list);
 
   /* Set up a thread structure for the running thread. */
   initial_thread = running_thread ();
@@ -246,7 +249,7 @@ thread_unblock (struct thread *t)
 {
   enum intr_level old_level;
 
-  debug_backtrace();
+  //debug_backtrace();
   ASSERT (is_thread (t));
 
   old_level = intr_disable ();
