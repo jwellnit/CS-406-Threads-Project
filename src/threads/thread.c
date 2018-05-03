@@ -555,60 +555,19 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 void 
 priority_donate(struct lock *lock){
 
-	//lock knows thread 1: the holder
-	//cur thread priority
-	//compare priorities
-	//donate 
-	
-	//save original priority
-	//revert when 
-	
         struct thread *cur = thread_current(); //set a current thread
 	
 	//lock_try_acquire(lock)
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock 
 	
-		//dont need to donate; return success
-	//do we want cur to go on the waiters list
 	}else{
-		//holder needs to go up
 		//disable interrupts here
 		struct thread *holder = lock->holder; //check holder not 0
 		if(holder->priority < cur->priority){
 			holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
 		}
-		
-// 		struct thread *holder = lock->holder; //check holder not 0
-//                 if(holder->priority < cur->priority){
-//                         holder->priority = cur->priority; //donate
-//                         while(!lock_try_acquire(lock));
-              
-//         //      list_sort(&ready_list, priority_sort, NULL);
-//                 //      lock_acquire(lock);
-		
-//                 }
-//                 else{//what if its smaller
-//                         while(!lock_try_acquire(lock));
-
-                
-		//use a loop not recursion: run through 
-		
-		// you have lock you have holder(a thread) and you need ot konw which lock thread might be waiting on
-		//waiting on 1 lock at any one time
-		//add to thread ctrl block a point to the lock you're waiting for (wait_for)
-		//then wait_for points to another lock points to another holder
-		
-        	//list_sort(&lock->semaphore.waiters, priority_sort, NULL); //sort the list of threads waiting on the lock
-	
- 		//const struct thread *a = list_entry(list_front(&lock->semaphore.waiters), struct thread, elem); //get the waiting thread w/ the highest priority
-	
- 		//int highest = a->priority; // get the priority of the highest priority thread (based on Frankie's code)
- 		//printf("%d", highest); // try to see it 
-	
-		//thread_set_priority(highest); // reset the priority
-	//end of else
-
+		}
 }//end of priority_donate
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
