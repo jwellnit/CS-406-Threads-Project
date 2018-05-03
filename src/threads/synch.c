@@ -130,16 +130,20 @@ sema_up (struct semaphore *sema)
   if (!list_empty (&sema->waiters)) {
     struct thread *t = list_entry (list_pop_front (&sema->waiters), struct thread, elem);
     thread_unblock (t);
-    // if (t->priority > thread_get_priority()) {
-    //  i = 1;
-    // }
+    if (t->priority > thread_get_priority()) {
+      i = 1;
+    }
   }
   sema->value++;
   intr_set_level (old_level);
 
-  // if (i) {
-  //  thread_yield();
-  // }
+  if (i) {
+    if (intr_context()) {
+      intr_yield_on_return();
+    } else {
+      thread_yield();
+    }
+  }
 }
 
 static void sema_test_helper (void *sema_);
@@ -217,10 +221,10 @@ lock_acquire (struct lock *lock)
   ASSERT (lock != NULL);
   ASSERT (!intr_context ());
   ASSERT (!lock_held_by_current_thread (lock));
-	
+
   if(lock->holder == NULL){
 	lock_acquire_int(lock);
-  }else{   
+  }else{
         priority_donate(lock);
   }
 }
@@ -232,9 +236,9 @@ lock_acquire_int (struct lock *lock)
   ASSERT (lock != NULL);
   ASSERT (!intr_context ());
   ASSERT (!lock_held_by_current_thread (lock));
-	
+
 enum intr_level old_level;
-old_level = intr_disable (); 
+old_level = intr_disable ();
 sema_down (&lock->semaphore);
 lock->holder = thread_current ();
 intr_set_level (old_level);

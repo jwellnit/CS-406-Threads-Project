@@ -204,14 +204,13 @@ timer_interrupt (struct intr_frame *args UNUSED)
   while (!list_empty(&alarmList)){
     struct alarm *next = list_entry(list_front(&alarmList), struct alarm, elem);
     if (next->end <= timer_ticks()) {
-       sema_up(&(next->sema));
        list_pop_front(&alarmList);
     } else {
      break;
     }
   }
   intr_set_level(prv);
-
+  sema_up(&(next->sema));
 }
 
 /* Returns true if LOOPS iterations waits for more than one timer
