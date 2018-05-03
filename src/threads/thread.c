@@ -597,7 +597,7 @@ priority_return(struct lock *lock){
 	//set the priority to the old priority
 	//release lock
 	//return priority
-	lock_release(lock);
+	//lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
 	cur->priority = cur->old_priority;
 }
