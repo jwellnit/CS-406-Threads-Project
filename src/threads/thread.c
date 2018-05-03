@@ -573,7 +573,7 @@ priority_donate(struct lock *lock){
         struct thread *cur = thread_current(); //set a current thread
 
 
-	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
+	if(lock_held_by_current_thread(lock)/*lock_try_acquire(lock)*/){ //current thread tries to acquire the lock
 			return;
 		//dont need to donate; return success
 	
