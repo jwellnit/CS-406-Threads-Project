@@ -566,19 +566,32 @@ priority_donate(struct lock *lock){
         struct thread *cur = thread_current(); //set a current thread
 	
 	//lock_try_acquire(lock)
-	if(lock_held_by_current_thread(lock)){ //current thread tries to acquire the lock 
+// 	if(lock_held_by_current_thread(lock)){ //current thread tries to acquire the lock 
 	
-		//dont need to donate; return success
-	//do we want cur to go on the waiters list
-	}else{
-		//holder needs to go up
-		//disable interrupts here
-		struct thread *holder = lock->holder; //check holder not 0
-		if(holder->priority < cur->priority){
-			holder->priority = cur->priority; //donate
-			lock_acquire(lock);
-		}
+// 		//dont need to donate; return success
+// 	//do we want cur to go on the waiters list
+// 	}else{
+// 		//holder needs to go up
+// 		//disable interrupts here
+// 		struct thread *holder = lock->holder; //check holder not 0
+// 		if(holder->priority < cur->priority){
+// 			holder->priority = cur->priority; //donate
+// 			//lock_acquire(lock);
+// 		}
 		
+		struct thread *holder = lock->holder; //check holder not 0
+                if(holder->priority < cur->priority){
+                        holder->priority = cur->priority; //donate
+                        while(!lock_try_acquire(lock));
+              
+        //      list_sort(&ready_list, priority_sort, NULL);
+                //      lock_acquire(lock);
+		
+                }
+                else{//what if its smaller
+                        while(!lock_try_acquire(lock));
+
+                }
 		//use a loop not recursion: run through 
 		
 		// you have lock you have holder(a thread) and you need ot konw which lock thread might be waiting on
