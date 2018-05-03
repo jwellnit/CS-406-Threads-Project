@@ -3,6 +3,7 @@
 #include <inttypes.h>
 #include <round.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include "devices/pit.h"
 #include "threads/interrupt.h"
 #include "threads/synch.h"
@@ -205,12 +206,12 @@ timer_interrupt (struct intr_frame *args UNUSED)
     struct alarm *next = list_entry(list_front(&alarmList), struct alarm, elem);
     if (next->end <= timer_ticks()) {
        list_pop_front(&alarmList);
+       sema_up(&(next->sema));
     } else {
      break;
     }
   }
   intr_set_level(prv);
-  sema_up(&(next->sema));
 }
 
 /* Returns true if LOOPS iterations waits for more than one timer
