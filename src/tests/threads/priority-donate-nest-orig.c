@@ -24,36 +24,36 @@ struct locks
 static thread_func medium_thread_func;
 static thread_func high_thread_func;
 
-struct lock pdn_a, pdn_b;
-struct locks pdn_locks;
-
 void
 test_priority_donate_nest (void) 
 {
+  struct lock a, b;
+  struct locks locks;
+
   /* This test does not work with the MLFQS. */
   ASSERT (!thread_mlfqs);
 
   /* Make sure our priority is the default. */
   ASSERT (thread_get_priority () == PRI_DEFAULT);
 
-  lock_init (&pdn_a);
-  lock_init (&pdn_b);
+  lock_init (&a);
+  lock_init (&b);
 
-  lock_acquire (&pdn_a);
+  lock_acquire (&a);
 
-  pdn_locks.a = &pdn_a;
-  pdn_locks.b = &pdn_b;
-  thread_create ("medium", PRI_DEFAULT + 1, medium_thread_func, &pdn_locks);
+  locks.a = &a;
+  locks.b = &b;
+  thread_create ("medium", PRI_DEFAULT + 1, medium_thread_func, &locks);
   thread_yield ();
   msg ("Low thread should have priority %d.  Actual priority: %d.",
        PRI_DEFAULT + 1, thread_get_priority ());
 
-  thread_create ("high", PRI_DEFAULT + 2, high_thread_func, &pdn_b);
+  thread_create ("high", PRI_DEFAULT + 2, high_thread_func, &b);
   thread_yield ();
   msg ("Low thread should have priority %d.  Actual priority: %d.",
        PRI_DEFAULT + 2, thread_get_priority ());
 
-  lock_release (&pdn_a);
+  lock_release (&a);
   thread_yield ();
   msg ("Medium thread should just have finished.");
   msg ("Low thread should have priority %d.  Actual priority: %d.",

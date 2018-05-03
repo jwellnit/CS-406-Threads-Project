@@ -30,7 +30,7 @@
 #include "threads/synch.h"
 #include "threads/thread.h"
 
-#define NESTING_DEPTH 6
+#define NESTING_DEPTH 8
 
 struct lock_pair
   {
@@ -45,8 +45,8 @@ void
 test_priority_donate_chain (void) 
 {
   int i;  
-  static struct lock locks[NESTING_DEPTH - 1];
-  static struct lock_pair lock_pairs[NESTING_DEPTH];
+  struct lock locks[NESTING_DEPTH - 1];
+  struct lock_pair lock_pairs[NESTING_DEPTH];
 
   /* This test does not work with the MLFQS. */
   ASSERT (!thread_mlfqs);

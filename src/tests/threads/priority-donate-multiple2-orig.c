@@ -23,38 +23,39 @@
 static thread_func a_thread_func;
 static thread_func b_thread_func;
 static thread_func c_thread_func;
-static struct lock pdm2_a, pdm2_b;
 
 void
 test_priority_donate_multiple2 (void) 
 {
+  struct lock a, b;
+
   /* This test does not work with the MLFQS. */
   ASSERT (!thread_mlfqs);
 
   /* Make sure our priority is the default. */
   ASSERT (thread_get_priority () == PRI_DEFAULT);
 
-  lock_init (&pdm2_a);
-  lock_init (&pdm2_b);
+  lock_init (&a);
+  lock_init (&b);
 
-  lock_acquire (&pdm2_a);
-  lock_acquire (&pdm2_b);
+  lock_acquire (&a);
+  lock_acquire (&b);
 
-  thread_create ("a", PRI_DEFAULT + 3, a_thread_func, &pdm2_a);
+  thread_create ("a", PRI_DEFAULT + 3, a_thread_func, &a);
   msg ("Main thread should have priority %d.  Actual priority: %d.",
        PRI_DEFAULT + 3, thread_get_priority ());
 
   thread_create ("c", PRI_DEFAULT + 1, c_thread_func, NULL);
 
-  thread_create ("b", PRI_DEFAULT + 5, b_thread_func, &pdm2_b);
+  thread_create ("b", PRI_DEFAULT + 5, b_thread_func, &b);
   msg ("Main thread should have priority %d.  Actual priority: %d.",
        PRI_DEFAULT + 5, thread_get_priority ());
 
-  lock_release (&pdm2_a);
+  lock_release (&a);
   msg ("Main thread should have priority %d.  Actual priority: %d.",
        PRI_DEFAULT + 5, thread_get_priority ());
 
-  lock_release (&pdm2_b);
+  lock_release (&b);
   msg ("Threads b, a, c should have just finished, in that order.");
   msg ("Main thread should have priority %d.  Actual priority: %d.",
        PRI_DEFAULT, thread_get_priority ());

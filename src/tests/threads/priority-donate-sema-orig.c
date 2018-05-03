@@ -25,11 +25,11 @@ struct lock_and_sema
 static thread_func l_thread_func;
 static thread_func m_thread_func;
 static thread_func h_thread_func;
-static struct lock_and_sema pds_ls;
 
 void
 test_priority_donate_sema (void) 
 {
+  struct lock_and_sema ls;
 
   /* This test does not work with the MLFQS. */
   ASSERT (!thread_mlfqs);
@@ -37,12 +37,12 @@ test_priority_donate_sema (void)
   /* Make sure our priority is the default. */
   ASSERT (thread_get_priority () == PRI_DEFAULT);
 
-  lock_init (&pds_ls.lock);
-  sema_init (&pds_ls.sema, 0);
-  thread_create ("low", PRI_DEFAULT + 1, l_thread_func, &pds_ls);
-  thread_create ("med", PRI_DEFAULT + 3, m_thread_func, &pds_ls);
-  thread_create ("high", PRI_DEFAULT + 5, h_thread_func, &pds_ls);
-  sema_up (&pds_ls.sema);
+  lock_init (&ls.lock);
+  sema_init (&ls.sema, 0);
+  thread_create ("low", PRI_DEFAULT + 1, l_thread_func, &ls);
+  thread_create ("med", PRI_DEFAULT + 3, m_thread_func, &ls);
+  thread_create ("high", PRI_DEFAULT + 5, h_thread_func, &ls);
+  sema_up (&ls.sema);
   msg ("Main thread finished.");
 }
 

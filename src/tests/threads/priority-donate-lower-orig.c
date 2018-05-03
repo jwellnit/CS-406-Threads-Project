@@ -11,20 +11,21 @@
 #include "threads/thread.h"
 
 static thread_func acquire_thread_func;
-static struct lock pdl_lock;
 
 void
 test_priority_donate_lower (void) 
 {
+  struct lock lock;
+
   /* This test does not work with the MLFQS. */
   ASSERT (!thread_mlfqs);
 
   /* Make sure our priority is the default. */
   ASSERT (thread_get_priority () == PRI_DEFAULT);
 
-  lock_init (&pdl_lock);
-  lock_acquire (&pdl_lock);
-  thread_create ("acquire", PRI_DEFAULT + 10, acquire_thread_func, &pdl_lock);
+  lock_init (&lock);
+  lock_acquire (&lock);
+  thread_create ("acquire", PRI_DEFAULT + 10, acquire_thread_func, &lock);
   msg ("Main thread should have priority %d.  Actual priority: %d.",
        PRI_DEFAULT + 10, thread_get_priority ());
 
@@ -32,7 +33,7 @@ test_priority_donate_lower (void)
   thread_set_priority (PRI_DEFAULT - 10);
   msg ("Main thread should have priority %d.  Actual priority: %d.",
        PRI_DEFAULT + 10, thread_get_priority ());
-  lock_release (&pdl_lock);
+  lock_release (&lock);
   msg ("acquire must already have finished.");
   msg ("Main thread should have priority %d.  Actual priority: %d.",
        PRI_DEFAULT - 10, thread_get_priority ());
