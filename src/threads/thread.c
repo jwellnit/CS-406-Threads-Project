@@ -246,6 +246,7 @@ thread_unblock (struct thread *t)
 {
   enum intr_level old_level;
 
+  debug_backtrace();
   ASSERT (is_thread (t));
 
   old_level = intr_disable ();
@@ -575,7 +576,7 @@ priority_donate(struct lock *lock){
 		struct thread *holder = lock->holder; 
 		
 		if(holder == 0) //check holder not 0
-			exit;
+			//exit;
 			
 		if(holder->priority < cur->priority){
 			holder->priority = cur->priority; //donate
