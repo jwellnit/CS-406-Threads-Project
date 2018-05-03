@@ -583,14 +583,14 @@ priority_donate(struct lock *lock){
 		// if(holder == 0) //check holder not 0
 		// 	lock_acquire_int(lock);
 		// 	//exit;
-		enum intr_level old_level;
-		old_level = intr_disable ();	
+		//enum intr_level old_level;
+		//old_level = intr_disable ();	
 		
 		if(holder->priority < cur->priority){
 			holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
 		}
-		intr_set_level (old_level);
+		//intr_set_level (old_level);
 		}
 }//end of priority_donate
 
