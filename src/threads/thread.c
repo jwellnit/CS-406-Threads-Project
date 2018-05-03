@@ -573,8 +573,6 @@ priority_donate(struct lock *lock){
 	// 	//dont need to donate; return success
 
 	//lock_try_acquire(lock)
-	enum intr_level old_level;
-	old_level = intr_disable ();
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
 	  	//return;
 	   lock_acquire_int(lock);
@@ -586,12 +584,17 @@ priority_donate(struct lock *lock){
 		// if(holder == 0) //check holder not 0
 		// 	lock_acquire_int(lock);
 		// 	//exit;	
+		
+		enum intr_level old_level;
+	        old_level = intr_disable ();
 		if(holder->priority < cur->priority){
 			holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
 		}//end if
+		intr_set_level (old_level);
+	
 	}//end else
-	intr_set_level (old_level);
+	
 }//end of priority_donate
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
