@@ -566,7 +566,7 @@ priority_donate(struct lock *lock){
         struct thread *cur = thread_current(); //set a current thread
 	
 	//lock_try_acquire(lock)
-	if(lock_try_aquire(lock)){ //current thread tries to acquire the lock 
+	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock 
 	
 		//dont need to donate; return success
 	//do we want cur to go on the waiters list
