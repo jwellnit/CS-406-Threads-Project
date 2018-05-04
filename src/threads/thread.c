@@ -613,11 +613,13 @@ bool check_lock_list(struct thread *t){
 
   struct thread *temp = t;
 
+  struct list_elem *e;
+  
   for (e = list_rbegin (&lock_list); e != list_rend (&lock_list);
        e = list_prev (e))
     {
-      struct thread *thread = list_entry (e, struct thread, t->elem);
-      if(temp->tid_t == thread->tid_t ){
+      struct thread *thread = list_entry (&lock_list, struct thread, t->elem);
+      if(temp->tid == thread->tid ){
           return true;
       }
 
@@ -630,7 +632,7 @@ bool lock_list_remove(struct thread *t){
     enum intr_level old_level;
     old_level = intr_disable ();
 
-    list_remove(list_entry (e, struct thread, t->elem));
+    list_remove(list_entry (&lock_list, struct thread, t->elem));
 
     intr_set_level (old_level);
     return true;
