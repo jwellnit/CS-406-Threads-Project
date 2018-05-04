@@ -631,19 +631,19 @@ bool check_lock_list(struct thread *t){
     return false;
 }
 
-bool lock_list_remove(struct thread *t){
-
-  if(check_lock_list(t)){
-    enum intr_level old_level;
-    old_level = intr_disable ();
-
-    list_remove();
-
-    intr_set_level (old_level);
-    return true;
-  }
-  return false;
-}
+// bool lock_list_remove(struct thread *t){
+//
+//   if(check_lock_list(t)){
+//     enum intr_level old_level;
+//     old_level = intr_disable ();
+//
+//     list_remove();
+//
+//     intr_set_level (old_level);
+//     return true;
+//   }
+//   return false;
+// }
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
 void
