@@ -624,7 +624,7 @@ bool check_lock_list(struct thread *temp){
        e = list_next (e))
     {
       struct thread *t = list_entry (e, struct thread, lock_elem);
-      if(temp->tid == cur->tid ){
+      if(cur_temp->tid == t->tid ){
              return true;
           }//end of if
 
@@ -638,10 +638,6 @@ bool check_lock_list(struct thread *temp){
   //         return true;
   //     }
   //   }//end of for
-e = list_begin(&lock_list);
-while(){
-
-}
     return false;
 }
 
