@@ -576,7 +576,8 @@ priority_donate(struct lock *lock){
 
 	//lock_try_acquire(lock)
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
-	  	return;
+      priority_return();
+      return;
 	  // lock_acquire_int(lock);
 	}else{
 		//disable interrupts here
