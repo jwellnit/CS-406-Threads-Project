@@ -363,6 +363,7 @@ thread_set_priority (int new_priority)
 {
   enum intr_level old_level;
   old_level = intr_disable ();
+  thread_current ()->old_priority = thread_current ()->priority;	
   thread_current ()->priority = new_priority;
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
