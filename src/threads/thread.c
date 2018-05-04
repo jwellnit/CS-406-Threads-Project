@@ -576,7 +576,7 @@ priority_donate(struct lock *lock){
 
 	//lock_try_acquire(lock)
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
-      priority_return();
+    //  priority_return(); does not work here
       return;
 	  // lock_acquire_int(lock);
 	}else{
@@ -600,6 +600,7 @@ priority_donate(struct lock *lock){
       intr_set_level (old_level);
 		}
 		}
+    priority_return();
 }//end of priority_donate
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
