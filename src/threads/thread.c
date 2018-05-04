@@ -32,6 +32,76 @@ static struct list all_list;
 /* lock list */
 static struct list lock_list;
 
+/* mlfq specific */
+/* array of queues */
+static struct list priorityQueues[PRI_MAX];
+
+/* individual priority queues */
+static struct list pri0;
+static struct list pri1;
+static struct list pri2;
+static struct list pri3;
+static struct list pri4;
+static struct list pri5;
+static struct list pri6;
+static struct list pri7;
+static struct list pri8;
+static struct list pri9;
+static struct list pri10;
+static struct list pri11;
+static struct list pri12;
+static struct list pri13;
+static struct list pri14;
+static struct list pri15;
+static struct list pri16;
+static struct list pri17;
+static struct list pri18;
+static struct list pri19;
+static struct list pri20;
+static struct list pri21;
+static struct list pri22;
+static struct list pri23;
+static struct list pri24;
+static struct list pri25;
+static struct list pri26;
+static struct list pri27;
+static struct list pri28;
+static struct list pri29;
+static struct list pri30;
+static struct list pri31;
+static struct list pri32;
+static struct list pri33;
+static struct list pri34;
+static struct list pri35;
+static struct list pri36;
+static struct list pri37;
+static struct list pri38;
+static struct list pri39;
+static struct list pri40;
+static struct list pri41;
+static struct list pri42;
+static struct list pri43;
+static struct list pri44;
+static struct list pri45;
+static struct list pri46;
+static struct list pri47;
+static struct list pri48;
+static struct list pri49;
+static struct list pri50;
+static struct list pri51;
+static struct list pri52;
+static struct list pri53;
+static struct list pri54;
+static struct list pri55;
+static struct list pri56;
+static struct list pri57;
+static struct list pri58;
+static struct list pri59;
+static struct list pri60;
+static struct list pri61;
+static struct list pri62;
+static struct list pri63;
+
 /* Idle thread. */
 static struct thread *idle_thread;
 
@@ -547,11 +617,21 @@ alloc_frame (struct thread *t, size_t size)
 static struct thread *
 next_thread_to_run (void)
 {
-  if (list_empty (&ready_list))
-    return idle_thread;
-  else
-    list_sort(&ready_list, priority_sort, NULL);
-    return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front
+  if (!thread_mlfqs) {
+    if (list_empty (&ready_list))
+      return idle_thread;
+    else {
+      list_sort(&ready_list, priority_sort, NULL);
+      return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front
+    }
+  } else {
+    if (list_empty (&ready_list))
+      return idle_thread;
+    else {
+      list_sort(&ready_list, priority_sort, NULL);
+      return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front
+    }
+  }
 }
 
 /*
