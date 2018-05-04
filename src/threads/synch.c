@@ -282,6 +282,10 @@ lock_release (struct lock *lock)
 
   lock->holder = NULL;
   sema_up (&lock->semaphore);
+
+  if(thread_current() ->donated_to == true){
+    priority_return();
+  }
 }
 
 /* Returns true if the current thread holds LOCK, false
