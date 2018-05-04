@@ -588,7 +588,7 @@ priority_donate(struct lock *lock){
     old_level = intr_disable ();
 		struct thread *holder = lock->holder;
 
-    list_push_back (&lock_list, &holder->elem);
+    list_push_back (&lock_list, &holder->lock_elem);
 
     intr_set_level (old_level);
 
@@ -609,25 +609,39 @@ priority_donate(struct lock *lock){
   //  priority_return(); does not work here
 }//end of priority_donate
 
-bool check_lock_list(struct thread *t){
+bool check_lock_list(struct thread *temp){
+//Declarations
+  struct thread *cur_temp = temp;
+  struct list_elem *e;
 
-  struct thread *temp = t;
+  ASSERT (intr_get_level () == INTR_OFF);
 
   if(list_empty(&lock_list)){
     return false;
   }
 
-  struct list_elem *e;
-
   for (e = list_begin (&lock_list); e != list_end (&lock_list);
        e = list_next (e))
     {
-      struct thread *cur = list_entry (e, struct thread, elem);
+      struct thread *t = list_entry (e, struct thread, lock_elem);
       if(temp->tid == cur->tid ){
-          return true;
-      }
+             return true;
+          }//end of if
+
     }//end of for
 
+  // for (e = list_begin (&lock_list); e != list_end (&lock_list);
+  //      e = list_next (e))
+  //   {
+  //     struct thread *cur = list_entry (e, struct thread, elem);
+  //     if(temp->tid == cur->tid ){
+  //         return true;
+  //     }
+  //   }//end of for
+e = list_begin(&lock_list);
+while(){
+
+}
     return false;
 }
 
@@ -637,8 +651,7 @@ bool check_lock_list(struct thread *t){
 //     enum intr_level old_level;
 //     old_level = intr_disable ();
 //
-//     list_remove();
-//
+//     list_remove(&t->lock_elem);
 //     intr_set_level (old_level);
 //     return true;
 //   }
