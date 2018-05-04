@@ -619,15 +619,15 @@ bool check_lock_list(struct thread *t){
 
   struct list_elem *e;
 
-  for (e = list_rbegin (&lock_list); e != list_rend (&lock_list);
-       e = list_prev (e))
+  for (e = list_begin (&lock_list); e != list_end (&lock_list);
+       e = list_next (e))
     {
-      struct thread *thread = list_entry (&lock_list, struct thread, t->elem);
-      if(temp->tid == thread->tid ){
+      struct thread *cur = list_entry (e, struct thread, elem);
+      if(temp->tid == cur->tid ){
           return true;
       }
-
     }//end of for
+
     return false;
 }
 
