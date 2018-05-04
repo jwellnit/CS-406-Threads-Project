@@ -300,6 +300,7 @@ struct semaphore_elem
   {
     struct list_elem elem;              /* List element. */
     struct semaphore semaphore;         /* This semaphore. */
+    int priority;
   };
 
   /* temporary version of a sort just for the sync file */
@@ -308,8 +309,8 @@ struct semaphore_elem
   priority_sort_cond (const struct list_elem *a_, const struct list_elem *b_,
               void *aux UNUSED)
   {
-    const struct thread *a = list_entry(list_front(&(list_entry (a_, struct semaphore_elem, elem) -> semaphore.waiters)), struct thread, elem);
-    const struct thread *b = list_entry(list_front(&(list_entry (b_, struct semaphore_elem, elem) -> semaphore.waiters)), struct thread, elem);
+    const struct semaphore_elem *a = list_entry (a_, struct semaphore_elem, elem);
+    const struct semaphore_elem *b = list_entry (b_, struct semaphore_elem, elem);
 
     return a->priority > b->priority;
   }
@@ -349,6 +350,7 @@ void
 cond_wait (struct condition *cond, struct lock *lock)
 {
   struct semaphore_elem waiter;
+  waiter.priority = thread_current()->priority;
 
   ASSERT (cond != NULL);
   ASSERT (lock != NULL);
