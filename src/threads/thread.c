@@ -588,7 +588,7 @@ priority_donate(struct lock *lock){
     old_level = intr_disable ();
 		struct thread *holder = lock->holder;
 
-    list_push_back (&lock_list, holder->elem);
+    list_push_back (&lock_list, &holder->elem);
 
     intr_set_level (old_level);
 
