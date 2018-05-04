@@ -588,7 +588,7 @@ priority_donate(struct lock *lock){
     old_level = intr_disable ();
 		struct thread *holder = lock->holder;
 
-    list_entry (list_pop_front (&lock_list), struct thread, elem);
+    list_entry (list_push_back (&lock_list), struct thread, elem);
 
     intr_set_level (old_level);
 
@@ -613,8 +613,12 @@ bool check_lock_list(struct thread *t){
 
   struct thread *temp = t;
 
+  if(list_empty(&lock_list)){
+    return false;
+  }
+
   struct list_elem *e;
-  
+
   for (e = list_rbegin (&lock_list); e != list_rend (&lock_list);
        e = list_prev (e))
     {
