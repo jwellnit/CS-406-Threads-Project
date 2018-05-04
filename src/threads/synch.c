@@ -289,10 +289,9 @@ lock_release (struct lock *lock)
   sema_up (&lock->semaphore);
 
 
-  if(check_lock_list(thread_current())){
-  //  priority_return();
+  if(thread_current() ->donated_to == true){
+    priority_return();
   }
-  //priority_donate(lock);
 
 }
 

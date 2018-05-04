@@ -587,6 +587,7 @@ priority_donate(struct lock *lock){
     enum intr_level old_level;
     old_level = intr_disable ();
 		struct thread *holder = lock->holder;
+    holder->donated_to = true;
 
     list_push_back (&lock_list, &holder->lock_elem);
 
@@ -609,37 +610,37 @@ priority_donate(struct lock *lock){
   //  priority_return(); does not work here
 }//end of priority_donate
 
-bool check_lock_list(struct thread *temp){
-//Declarations
-  struct thread *cur_temp = temp;
-  struct list_elem *e;
-
-  ASSERT (intr_get_level () == INTR_OFF);
-
-  if(list_empty(&lock_list)){
-    return false;
-  }
-
-  for (e = list_begin (&lock_list); e != list_end (&lock_list);
-       e = list_next (e))
-    {
-      struct thread *t = list_entry (e, struct thread, lock_elem);
-      if(cur_temp->tid == t->tid ){
-             return true;
-          }//end of if
-
-    }//end of for
-
-  // for (e = list_begin (&lock_list); e != list_end (&lock_list);
-  //      e = list_next (e))
-  //   {
-  //     struct thread *cur = list_entry (e, struct thread, elem);
-  //     if(temp->tid == cur->tid ){
-  //         return true;
-  //     }
-  //   }//end of for
-    return false;
-}
+// bool check_lock_list(struct thread *temp){
+// //Declarations
+//   struct thread *cur_temp = temp;
+//   struct list_elem *e;
+//
+//   ASSERT (intr_get_level () == INTR_OFF);
+//
+//   if(list_empty(&lock_list)){
+//     return false;
+//   }
+//
+//   for (e = list_begin (&lock_list); e != list_end (&lock_list);
+//        e = list_next (e))
+//     {
+//       struct thread *t = list_entry (e, struct thread, lock_elem);
+//       if(cur_temp->tid == t->tid ){
+//              return true;
+//           }//end of if
+//
+//     }//end of for
+//
+//   // for (e = list_begin (&lock_list); e != list_end (&lock_list);
+//   //      e = list_next (e))
+//   //   {
+//   //     struct thread *cur = list_entry (e, struct thread, elem);
+//   //     if(temp->tid == cur->tid ){
+//   //         return true;
+//   //     }
+//   //   }//end of for
+//     return false;
+// }
 
 
 
@@ -665,6 +666,7 @@ priority_return(void){
 	//lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
 	cur->priority = cur->old_priority;
+  cur->donated_to = false;
 }
 
 /* Completes a thread switch by activating the new thread's page
