@@ -285,7 +285,7 @@ lock_release (struct lock *lock)
 
   lock->holder = NULL;
   sema_up (&lock->semaphore);
-  priority_return();
+  //priority_return();
 
 }
 
