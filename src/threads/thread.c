@@ -566,7 +566,7 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 void
 priority_donate(struct lock *lock){
 
-        struct thread *cur = thread_current(); //set a current thread
+  struct thread *cur = thread_current(); //set a current thread
 
 
 	// if(lock_held_by_current_thread(lock)/*lock_try_acquire(lock)*/){ //current thread tries to acquire the lock
@@ -589,8 +589,11 @@ priority_donate(struct lock *lock){
 		// 	//exit;
 
 		if(holder->priority < cur->priority){
+      enum intr_level old_level;
+      old_level = intr_disable ();
 			holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
+      intr_set_level (old_level);
 		}
 		}
 }//end of priority_donate
