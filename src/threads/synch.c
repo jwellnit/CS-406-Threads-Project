@@ -290,7 +290,7 @@ lock_release (struct lock *lock)
 
 
   if(check_lock_list(thread_current)){
-    priority_return();
+  //  priority_return();
   }
   //priority_donate(lock);
 
