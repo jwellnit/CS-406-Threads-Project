@@ -641,6 +641,8 @@ bool check_lock_list(struct thread *temp){
     return false;
 }
 
+
+
 // bool lock_list_remove(struct thread *t){
 //
 //   if(check_lock_list(t)){
