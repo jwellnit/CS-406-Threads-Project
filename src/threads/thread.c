@@ -591,8 +591,10 @@ priority_donate(struct lock *lock){
 		if(holder->priority < cur->priority){
       enum intr_level old_level;
       old_level = intr_disable ();
-			holder->priority = cur->priority; //donate
+
+      holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
+
       intr_set_level (old_level);
 		}
 		}
@@ -600,7 +602,7 @@ priority_donate(struct lock *lock){
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
 void
-priority_return(struct lock *lock){
+priority_return(void){
 	//set the priority to the old priority
 	//release lock
 	//return priority

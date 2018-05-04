@@ -142,7 +142,7 @@ int thread_get_load_avg (void);
 static bool priority_sort (const struct list_elem *a_, const struct list_elem *b_, void *aux UNUSED); //added
 //static bool thread_get_lock (void);                                                                   //added
 void priority_donate(struct lock *lock); //added
-void priority_return(struct lock *lock); //added
+void priority_return(void); //added
 void set_priority (int new_priority, struct thread *thread);
 
 #endif /* threads/thread.h */
