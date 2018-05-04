@@ -210,6 +210,7 @@ thread_create (const char *name, int priority,
   sf->eip = switch_entry;
   sf->ebp = 0;
 
+  t->donated_to = false;
   intr_set_level (old_level);
   /* add lock to lock_list if one is given */
 // 	if(is_lock(aux)){
@@ -363,13 +364,18 @@ thread_set_priority (int new_priority)
 {
   enum intr_level old_level;
   old_level = intr_disable ();
-  //thread_current ()->old_priority = thread_current ()->priority;	
-  thread_current ()->priority = new_priority;
-  list_sort(&ready_list, priority_sort, NULL);
-  thread_yield();
+  if(thread_current ()->donated_to == true && (new_priority < thread_current ()->priority)){
+      //thread_yield();
+  }//end if
+  else{
+    int temp = thread_current ()->priority;
+    thread_current ()->old_priority = temp;
+    thread_current ()->priority = new_priority;
+    list_sort(&ready_list, priority_sort, NULL);
+    thread_yield();
+  }//end else
   intr_set_level (old_level);
-
-}
+}//end of thread_set_priority
 
 /* Sets the given thread's priority to NEW_PRIORITY.
  * This method was changed to use a lock when setting the priority of a thread.
@@ -579,15 +585,24 @@ priority_donate(struct lock *lock){
 	  // lock_acquire_int(lock);
 	}else{
 		//disable interrupts here
-		struct thread *holder = lock->holder;
+		enum intr_level old_level;
+    		old_level = intr_disable ();
+
+   		struct thread *holder = lock->holder;
+    		holder->donated_to = true;
+		list_push_back (&lock_list, &holder->lock_elem);
+		intr_set_level (old_level);
 
 		// if(holder == 0) //check holder not 0
 		// 	lock_acquire_int(lock);
 		// 	//exit;
 
 		if(holder->priority < cur->priority){
+		        enum intr_level old_level;
+                        old_level = intr_disable ();
 			holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
+			intr_set_level (old_level);
 		}
 		}
 }//end of priority_donate
@@ -601,6 +616,7 @@ priority_return(struct lock *lock){
 	lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
 	cur->priority = cur->old_priority;
+	cur->donated_to = false;
 }
 
 /* Completes a thread switch by activating the new thread's page
