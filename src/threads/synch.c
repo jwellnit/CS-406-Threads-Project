@@ -69,8 +69,8 @@ static bool
 priority_sort_cond (const struct list_elem *a_, const struct list_elem *b_,
             void *aux UNUSED)
 {
-  const struct thread *a = list_entry(list_front(list_entry (a_, struct semaphore_elem, elem) -> waiters), struct thread, elem);
-  const struct thread *b = list_entry(list_front(list_entry (b_, struct semaphore_elem, elem) -> waiters), struct thread, elem);
+  const struct thread *a = list_entry(list_front(list_entry (a_, struct semaphore_elem, elem) -> semaphore -> waiters), struct thread, elem);
+  const struct thread *b = list_entry(list_front(list_entry (b_, struct semaphore_elem, elem) -> semaphore -> waiters), struct thread, elem);
 
   return a->priority > b->priority;
 }
