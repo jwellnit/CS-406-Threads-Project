@@ -90,7 +90,7 @@ struct thread
     uint8_t *stack;                     /* Saved stack pointer. */
     int priority;                       /* Priority. */
     int old_priority;
-    bool donated_to = false;               /*save old priority for priority donation*/
+    bool donated_to;               /*save old priority for priority donation*/
     struct list_elem allelem;           /* List element for all threads list. */
 
     /* Shared between thread.c and synch.c. */

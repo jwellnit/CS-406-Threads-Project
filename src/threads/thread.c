@@ -211,6 +211,7 @@ thread_create (const char *name, int priority,
   sf->eip = switch_entry;
   sf->ebp = 0;
 
+  t->donated_to = false;
   intr_set_level (old_level);
   /* add lock to lock_list if one is given */
 // 	if(is_lock(aux)){
