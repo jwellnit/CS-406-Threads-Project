@@ -600,7 +600,7 @@ priority_donate(struct lock *lock){
       intr_set_level (old_level);
 		}
 		}
-    priority_return();
+  //  priority_return(); does not work here  
 }//end of priority_donate
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */

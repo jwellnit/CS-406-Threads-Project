@@ -269,6 +269,7 @@ old_level = intr_disable ();
 if (success)
     lock->holder = thread_current ();
 intr_set_level (old_level);
+priority_return();
   return success;
 }
 
