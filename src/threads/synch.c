@@ -63,17 +63,6 @@ priority_sort_sync (const struct list_elem *a_, const struct list_elem *b_,
   return a->priority > b->priority;
 }
 
-/* temporary version of a sort just for the sync file */
-
-static bool
-priority_sort_cond (const struct list_elem *a_, const struct list_elem *b_,
-            void *aux UNUSED)
-{
-  const struct thread *a = list_entry(list_front(list_entry (a_, struct semaphore_elem, elem) -> semaphore -> waiters), struct thread, elem);
-  const struct thread *b = list_entry(list_front(list_entry (b_, struct semaphore_elem, elem) -> semaphore -> waiters), struct thread, elem);
-
-  return a->priority > b->priority;
-}
 
 /* Down or "P" operation on a semaphore.  Waits for SEMA's value
    to become positive and then atomically decrements it.
@@ -312,6 +301,18 @@ struct semaphore_elem
     struct list_elem elem;              /* List element. */
     struct semaphore semaphore;         /* This semaphore. */
   };
+
+  /* temporary version of a sort just for the sync file */
+
+  static bool
+  priority_sort_cond (const struct list_elem *a_, const struct list_elem *b_,
+              void *aux UNUSED)
+  {
+    const struct thread *a = list_entry(list_front(list_entry (a_, struct semaphore_elem, elem) -> semaphore -> waiters), struct thread, elem);
+    const struct thread *b = list_entry(list_front(list_entry (b_, struct semaphore_elem, elem) -> semaphore -> waiters), struct thread, elem);
+
+    return a->priority > b->priority;
+  }
 
 /* Initializes condition variable COND.  A condition variable
    allows one piece of code to signal a condition and cooperating
