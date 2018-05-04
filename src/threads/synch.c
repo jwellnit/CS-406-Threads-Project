@@ -63,6 +63,18 @@ priority_sort_sync (const struct list_elem *a_, const struct list_elem *b_,
   return a->priority > b->priority;
 }
 
+/* temporary version of a sort just for the sync file */
+
+static bool
+priority_sort_cond (const struct list_elem *a_, const struct list_elem *b_,
+            void *aux UNUSED)
+{
+  const struct thread *a = list_entry(list_front(list_entry (a_, struct semaphore_elem, elem) -> waiters), struct thread, elem);
+  const struct thread *b = list_entry(list_front(list_entry (b_, struct semaphore_elem, elem) -> waiters), struct thread, elem);
+
+  return a->priority > b->priority;
+}
+
 /* Down or "P" operation on a semaphore.  Waits for SEMA's value
    to become positive and then atomically decrements it.
 
@@ -261,10 +273,10 @@ lock_try_acquire (struct lock *lock)
   success = sema_try_down (&lock->semaphore);
 
 enum intr_level old_level;
-old_level = intr_disable ();	  
-if (success)  
+old_level = intr_disable ();
+if (success)
     lock->holder = thread_current ();
-intr_set_level (old_level);	
+intr_set_level (old_level);
   return success;
 }
 
@@ -343,7 +355,8 @@ cond_wait (struct condition *cond, struct lock *lock)
   ASSERT (lock_held_by_current_thread (lock));
 
   sema_init (&waiter.semaphore, 0);
-  list_push_back (&cond->waiters, &waiter.elem);
+  //list_push_back (&cond->waiters, &waiter.elem);
+  list_insert_ordered (&cond->waiters, &waiter.elem, priority_sort_cond, NULL);
   lock_release (lock);
   sema_down (&waiter.semaphore);
   lock_acquire (lock);
