@@ -363,7 +363,7 @@ thread_set_priority (int new_priority)
 {
   enum intr_level old_level;
   old_level = intr_disable ();
-  //thread_current ()->old_priority = thread_current ()->priority;	
+  //thread_current ()->old_priority = thread_current ()->priority;
   thread_current ()->priority = new_priority;
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
@@ -579,7 +579,10 @@ priority_donate(struct lock *lock){
 	  // lock_acquire_int(lock);
 	}else{
 		//disable interrupts here
+    enum intr_level old_level;
+    old_level = intr_disable ();
 		struct thread *holder = lock->holder;
+    intr_set_level (old_level);
 
 		// if(holder == 0) //check holder not 0
 		// 	lock_acquire_int(lock);
@@ -598,7 +601,7 @@ priority_return(struct lock *lock){
 	//set the priority to the old priority
 	//release lock
 	//return priority
-	lock_release(lock);
+	//lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
 	cur->priority = cur->old_priority;
 }
