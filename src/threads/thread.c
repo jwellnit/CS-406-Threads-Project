@@ -632,11 +632,12 @@ bool check_lock_list(struct thread *t){
 }
 
 bool lock_list_remove(struct thread *t){
+
   if(check_lock_list(t)){
     enum intr_level old_level;
     old_level = intr_disable ();
 
-    list_remove(list_entry (&lock_list, struct thread, t->elem));
+    list_remove(list_entry (&lock_list, struct thread, &t->elem));
 
     intr_set_level (old_level);
     return true;
