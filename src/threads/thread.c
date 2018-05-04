@@ -609,11 +609,10 @@ priority_donate(struct lock *lock){
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
 void
-priority_return(struct lock *lock){
+priority_return(void){
 	//set the priority to the old priority
 	//release lock
 	//return priority
-	lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
 	cur->priority = cur->old_priority;
 	cur->donated_to = false;
