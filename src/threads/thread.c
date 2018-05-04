@@ -511,8 +511,10 @@ init_thread (struct thread *t, const char *name, int priority)
   t->status = THREAD_BLOCKED;
   strlcpy (t->name, name, sizeof t->name);
   t->stack = (uint8_t *) t + PGSIZE;
-  t->old_priority = priority;
-  t->priority = priority;
+  if (!thread_mlfqs) {
+    t->old_priority = priority;
+    t->priority = priority;
+  }
   t->magic = THREAD_MAGIC;
   list_push_back (&all_list, &t->allelem);
 }
