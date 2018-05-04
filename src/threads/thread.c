@@ -28,7 +28,8 @@ static struct list ready_list;
 /* List of all processes.  Processes are added to this list
    when they are first scheduled and removed when they exit. */
 static struct list all_list;
-/* lock list */
+
+/* List of all threads that have locks that cause conflict */
 static struct list lock_list;
 
 /* Idle thread. */
@@ -574,7 +575,9 @@ priority_donate(struct lock *lock){
 	// 		return;
 	// 	//dont need to donate; return success
 
-	//lock_try_acquire(lock)
+
+
+
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
     //  priority_return(); does not work here
       return;
@@ -584,6 +587,9 @@ priority_donate(struct lock *lock){
     enum intr_level old_level;
     old_level = intr_disable ();
 		struct thread *holder = lock->holder;
+
+    list_entry (list_pop_front (&lock_list), struct thread, elem);
+
     intr_set_level (old_level);
 
 		// if(holder == 0) //check holder not 0
@@ -600,8 +606,37 @@ priority_donate(struct lock *lock){
       intr_set_level (old_level);
 		}
 		}
-  //  priority_return(); does not work here  
+  //  priority_return(); does not work here
 }//end of priority_donate
+
+bool check_lock_list(struct thread *t){
+
+  struct thread *temp = t;
+
+  for (e = list_rbegin (&lock_list); e != list_rend (&lock_list);
+       e = list_prev (e))
+    {
+      struct thread *thread = list_entry (e, struct thread, t->elem);
+      if(temp->tid_t == thread->tid_t ){
+          return true;
+      }
+
+    }//end of for
+    return false;
+}
+
+bool lock_list_remove(struct thread *t){
+  if(check_lock_list(t)){
+    enum intr_level old_level;
+    old_level = intr_disable ();
+
+    list_remove(list_entry (e, struct thread, t->elem));
+
+    intr_set_level (old_level);
+    return true;
+  }
+  return false;
+}
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
 void

@@ -287,7 +287,12 @@ lock_release (struct lock *lock)
 
   lock->holder = NULL;
   sema_up (&lock->semaphore);
-  priority_return();
+
+
+  if(lock_list_remove(thread_current())){
+    priority_return();
+  }
+  //priority_donate(lock);
 
 }
 
