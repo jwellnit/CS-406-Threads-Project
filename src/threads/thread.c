@@ -637,7 +637,7 @@ bool lock_list_remove(struct thread *t){
     enum intr_level old_level;
     old_level = intr_disable ();
 
-    list_remove(list_entry (&lock_list, struct thread, &t->elem));
+    list_remove();
 
     intr_set_level (old_level);
     return true;
