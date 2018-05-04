@@ -229,6 +229,7 @@ lock_acquire (struct lock *lock)
     //enum intr_level old_level;
     //old_level = intr_disable ();
         priority_donate(lock);
+        priority_return();
     //intr_set_level (old_level);
   }
 }
