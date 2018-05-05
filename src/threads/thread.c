@@ -596,7 +596,7 @@ priority_donate(struct lock *lock){
   old_level = intr_disable ();
 
   struct thread *cur = thread_current(); //set a current thread
-
+  holder->donated_to = true;
 
 	// if(lock_held_by_current_thread(lock)/*lock_try_acquire(lock)*/){ //current thread tries to acquire the lock
 	// 		return;
@@ -612,7 +612,7 @@ priority_donate(struct lock *lock){
     // old_level = intr_disable ();
 
 		struct thread *holder = lock->holder;
-    holder->donated_to = true;
+    //holder->donated_to = true;
 
 
     //list_push_back (&lock_list, &holder->lock_elem);
