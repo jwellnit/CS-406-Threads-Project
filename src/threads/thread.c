@@ -656,10 +656,10 @@ thread_get_load_avg (void)
   struct fpoint *ratio2;
   fpoint_init(ratio2, 14, 1);
   fpoint_div_int (ratio2, 60, ratio2);
-  struct fpoint temp1;
+  struct fpoint *temp1;
   fpoint_init(temp1, 14, 0);
   fpoint_mult(ratio1, working, temp1);
-  struct fpoint temp2;
+  struct fpoint *temp2;
   fpoint_init(temp2, 14, 0);
   fpoint_mult_int(ratio2, list_size(&ready_list), temp2);
   fpoint_add(temp1, temp2, working);
