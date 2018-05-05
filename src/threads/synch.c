@@ -223,6 +223,9 @@ lock_acquire (struct lock *lock)
   ASSERT (!intr_context ());
   ASSERT (!lock_held_by_current_thread (lock));
 
+  enum intr_level old_level;
+  old_level = intr_disable ();
+
   if(lock->holder == NULL){
 	lock_acquire_int(lock);
   }else{
@@ -232,6 +235,7 @@ lock_acquire (struct lock *lock)
         //priority_return();
     //intr_set_level (old_level);
   }
+    intr_set_level (old_level);
 }
 
 //copy 2 lock aquire internal
