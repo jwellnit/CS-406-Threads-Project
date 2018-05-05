@@ -53,6 +53,7 @@ struct kernel_thread_frame
 static long long idle_ticks;    /* # of timer ticks spent idle. */
 static long long kernel_ticks;  /* # of timer ticks in kernel threads. */
 static long long user_ticks;    /* # of timer ticks in user programs. */
+static int load_avg;
 
 /* Scheduling. */
 #define TIME_SLICE 4            /* # of timer ticks to give each thread. */
@@ -99,12 +100,15 @@ thread_init (void)
   list_init (&all_list);
   list_init (&lock_list);
 
+  load_avg = 0;
+
   /* Set up a thread structure for the running thread. */
   initial_thread = running_thread ();
   init_thread (initial_thread, "main", PRI_DEFAULT);
   initial_thread->status = THREAD_RUNNING;
   initial_thread->tid = allocate_tid ();
   initial_thread->nice = 0;
+  initial_thread->recent_cpu = 0;
 }
 
 /* Starts preemptive thread scheduling by enabling interrupts.
@@ -193,6 +197,7 @@ thread_create (const char *name, int priority,
   tid = t->tid = allocate_tid ();
   if (thread_mlfqs) {
     t->nice = thread_current()->nice;
+    t->recent_cpu = thread_current()->recent_cpu;
   }
 
   /* Prepare thread for first run by initializing its stack.
