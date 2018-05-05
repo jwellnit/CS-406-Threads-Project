@@ -315,7 +315,7 @@ thread_init (void)
   initial_thread->status = THREAD_RUNNING;
   initial_thread->tid = allocate_tid ();
   initial_thread->nice = 0;
-
+  initial_thread->recent_cpu = 0;
 }
 
 /* Starts preemptive thread scheduling by enabling interrupts.
@@ -404,6 +404,7 @@ thread_create (const char *name, int priority,
   tid = t->tid = allocate_tid ();
   if (thread_mlfqs) {
     t->nice = thread_current()->nice;
+    t->recent_cpu = thread_current()->recent_cpu;
   }
 
   /* Prepare thread for first run by initializing its stack.
@@ -672,8 +673,24 @@ thread_get_load_avg (void)
 int
 thread_get_recent_cpu (void)
 {
-  /* Not yet implemented. */
-  return 0;
+  struct fpoint *working;
+  fpoint_init(working, 14, thread_current()->recent_cpu);
+  fpoint_div_int (working, 100, working);
+  struct fpoint *loadavg;
+  fpoint_init(loadavg, 14, load_avg);
+  fpoint_div_int (loadavg, 100, loadavg);
+  struct fpoint *temp1;
+  fpoint_init(temp1, 14, 0);
+  fpoint_mult_int(loadavg, 2, temp1);
+  struct fpoint *temp2;
+  fpoint_init(temp2, 14, 0);
+  fpoint_add_int(temp1, 1, temp2);
+  fpoint_div(temp1, temp2, temp1);
+  fpoint_mult(working, temp1, working);
+  fpoint_add_int(working, thread_current()->nice, working);
+  fpoint_mult_int(working,100,working);
+  int ret = fpoint_to_int_nearest(working);
+  return ret;
 }
 
 /* Idle thread.  Executes when no other thread is ready to run.
