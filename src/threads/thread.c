@@ -369,7 +369,7 @@ thread_set_priority (int new_priority)
 
 
    //check if a thread is locked
-  if(thread_current()->donated_to != true){
+  if(thread_current()->donated_to == true){
      //if(thread_current()->priority > new_priority){
 
         thread_current()->lower = new_priority;
@@ -602,9 +602,6 @@ priority_donate(struct lock *lock){
 	// 		return;
 	// 	//dont need to donate; return success
 
-
-
-
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
     //  priority_return(); does not work here
       return;
@@ -618,7 +615,7 @@ priority_donate(struct lock *lock){
     holder->donated_to = true;
 
 
-    list_push_back (&lock_list, &holder->lock_elem);
+    //list_push_back (&lock_list, &holder->lock_elem);
 
     //intr_set_level (old_level);
 
@@ -651,9 +648,9 @@ priority_return(void){
 
   //printf("lower value =  \n");
 
-  if(cur->lower > -1){
-      cur->priority = cur->lower;
-      cur->lower = -1;
+  if(thread_current()lower != -1){
+      thread_current()->priority = thread_current()->lower;
+      thread_current()->lower = -1;
   }
   else{
     cur->priority = cur->old_priority;
