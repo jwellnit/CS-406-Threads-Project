@@ -531,8 +531,11 @@ init_thread (struct thread *t, const char *name, int priority)
   strlcpy (t->name, name, sizeof t->name);
   t->stack = (uint8_t *) t + PGSIZE;
   
-  t->old_priority = priority;	
-  //list_push_back(&old_priority_list, priority); //priority donate multiple
+  t->old_priority = priority;
+	
+  struct priority_elem x;
+  x.old_priority = priority;
+  list_push_back(&old_priority_list, &x.elem); //priority donate multiple
 	
   t->priority = priority;
 	
