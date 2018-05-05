@@ -92,6 +92,7 @@ struct thread
     int lower;                          /*Lower check */
     int old_priority;
     bool donated_to;               /*save old priority for priority donation*/
+    bool locked;  /*check if the thread is locked*/
     struct list_elem allelem;           /* List element for all threads list. */
 
     /* Shared between thread.c and synch.c. */
