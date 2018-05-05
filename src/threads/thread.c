@@ -98,7 +98,7 @@ thread_init (void)
   list_init (&ready_list);
   list_init (&all_list);
   list_init (&lock_list);
-  list_init (&old_priority_donate);
+  list_init (&old_priority_list);
 
   /* Set up a thread structure for the running thread. */
   initial_thread = running_thread ();
