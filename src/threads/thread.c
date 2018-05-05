@@ -373,8 +373,9 @@ thread_set_priority (int new_priority)
      //if(thread_current()->priority > new_priority){
 
         thread_current()->lower = new_priority;
-        
-          ASSERT(thread_current ()->lower != -1);
+
+        ASSERT(thread_current ()->lower == -1);
+
         return;
 
      //}
