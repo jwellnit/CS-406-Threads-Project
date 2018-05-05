@@ -52,6 +52,13 @@ struct kernel_thread_frame
     void *aux;                  /* Auxiliary data for function. */
   };
 
+// an element int to go into the old priority list 
+struct priority_elem
+  {
+    struct list_elem elem;              /* List element. */
+    int old_priority; //stores the the old priority
+  };
+
 /* Statistics. */
 static long long idle_ticks;    /* # of timer ticks spent idle. */
 static long long kernel_ticks;  /* # of timer ticks in kernel threads. */
@@ -377,9 +384,8 @@ thread_set_priority (int new_priority)
 
   //priority donate multiple
   struct priority_elem x;
-	//x->elem = old_priority_list;
-	x.old_priority = new_priority;
-  list_push_back(&old_priority_list, x.elem); 
+  x.old_priority = new_priority;
+  list_push_back(&old_priority_list, &x.elem); 
 	
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
