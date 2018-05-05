@@ -33,76 +33,6 @@ static struct list all_list;
 /* lock list */
 static struct list lock_list;
 
-/* mlfq specific */
-/* array of queues */
-// static struct list *priorityQueues[PRI_MAX+1];
-
-/* individual priority queues */
-// static struct list pri0;
-// static struct list pri1;
-// static struct list pri2;
-// static struct list pri3;
-// static struct list pri4;
-// static struct list pri5;
-// static struct list pri6;
-// static struct list pri7;
-// static struct list pri8;
-// static struct list pri9;
-// static struct list pri10;
-// static struct list pri11;
-// static struct list pri12;
-// static struct list pri13;
-// static struct list pri14;
-// static struct list pri15;
-// static struct list pri16;
-// static struct list pri17;
-// static struct list pri18;
-// static struct list pri19;
-// static struct list pri20;
-// static struct list pri21;
-// static struct list pri22;
-// static struct list pri23;
-// static struct list pri24;
-// static struct list pri25;
-// static struct list pri26;
-// static struct list pri27;
-// static struct list pri28;
-// static struct list pri29;
-// static struct list pri30;
-// static struct list pri31;
-// static struct list pri32;
-// static struct list pri33;
-// static struct list pri34;
-// static struct list pri35;
-// static struct list pri36;
-// static struct list pri37;
-// static struct list pri38;
-// static struct list pri39;
-// static struct list pri40;
-// static struct list pri41;
-// static struct list pri42;
-// static struct list pri43;
-// static struct list pri44;
-// static struct list pri45;
-// static struct list pri46;
-// static struct list pri47;
-// static struct list pri48;
-// static struct list pri49;
-// static struct list pri50;
-// static struct list pri51;
-// static struct list pri52;
-// static struct list pri53;
-// static struct list pri54;
-// static struct list pri55;
-// static struct list pri56;
-// static struct list pri57;
-// static struct list pri58;
-// static struct list pri59;
-// static struct list pri60;
-// static struct list pri61;
-// static struct list pri62;
-// static struct list pri63;
-
 static int load_avg;
 
 /* Idle thread. */
@@ -172,143 +102,7 @@ thread_init (void)
   list_init (&all_list);
   list_init (&lock_list);
 
-  if (thread_mlfqs) {
-    // list_init(&pri0);
-    // priorityQueues[0] = &pri0;
-    // list_init(&pri1);
-    // priorityQueues[1] = &pri1;
-    // list_init(&pri2);
-    // priorityQueues[2] = &pri2;
-    // list_init(&pri3);
-    // priorityQueues[3] = &pri3;
-    // list_init(&pri4);
-    // priorityQueues[4] = &pri4;
-    // list_init(&pri5);
-    // priorityQueues[5] = &pri5;
-    // list_init(&pri6);
-    // priorityQueues[6] = &pri6;
-    // list_init(&pri7);
-    // priorityQueues[7] = &pri7;
-    // list_init(&pri8);
-    // priorityQueues[8] = &pri8;
-    // list_init(&pri9);
-    // priorityQueues[9] = &pri9;
-    // list_init(&pri10);
-    // priorityQueues[10] = &pri10;
-    // list_init(&pri11);
-    // priorityQueues[11] = &pri11;
-    // list_init(&pri12);
-    // priorityQueues[12] = &pri12;
-    // list_init(&pri13);
-    // priorityQueues[13] = &pri13;
-    // list_init(&pri14);
-    // priorityQueues[14] = &pri14;
-    // list_init(&pri15);
-    // priorityQueues[15] = &pri15;
-    // list_init(&pri16);
-    // priorityQueues[16] = &pri16;
-    // list_init(&pri17);
-    // priorityQueues[17] = &pri17;
-    // list_init(&pri18);
-    // priorityQueues[18] = &pri18;
-    // list_init(&pri19);
-    // priorityQueues[19] = &pri19;
-    // list_init(&pri20);
-    // priorityQueues[20] = &pri20;
-    // list_init(&pri21);
-    // priorityQueues[21] = &pri21;
-    // list_init(&pri22);
-    // priorityQueues[22] = &pri22;
-    // list_init(&pri23);
-    // priorityQueues[23] = &pri23;
-    // list_init(&pri24);
-    // priorityQueues[24] = &pri24;
-    // list_init(&pri25);
-    // priorityQueues[25] = &pri25;
-    // list_init(&pri26);
-    // priorityQueues[26] = &pri26;
-    // list_init(&pri27);
-    // priorityQueues[27] = &pri27;
-    // list_init(&pri28);
-    // priorityQueues[28] = &pri28;
-    // list_init(&pri29);
-    // priorityQueues[29] = &pri29;
-    // list_init(&pri30);
-    // priorityQueues[30] = &pri30;
-    // list_init(&pri31);
-    // priorityQueues[31] = &pri31;
-    // list_init(&pri32);
-    // priorityQueues[32] = &pri32;
-    // list_init(&pri33);
-    // priorityQueues[33] = &pri33;
-    // list_init(&pri34);
-    // priorityQueues[34] = &pri34;
-    // list_init(&pri35);
-    // priorityQueues[35] = &pri35;
-    // list_init(&pri36);
-    // priorityQueues[36] = &pri36;
-    // list_init(&pri37);
-    // priorityQueues[37] = &pri37;
-    // list_init(&pri38);
-    // priorityQueues[38] = &pri38;
-    // list_init(&pri39);
-    // priorityQueues[39] = &pri39;
-    // list_init(&pri40);
-    // priorityQueues[40] = &pri40;
-    // list_init(&pri41);
-    // priorityQueues[41] = &pri41;
-    // list_init(&pri42);
-    // priorityQueues[42] = &pri42;
-    // list_init(&pri43);
-    // priorityQueues[43] = &pri43;
-    // list_init(&pri44);
-    // priorityQueues[44] = &pri44;
-    // list_init(&pri45);
-    // priorityQueues[45] = &pri45;
-    // list_init(&pri46);
-    // priorityQueues[46] = &pri46;
-    // list_init(&pri47);
-    // priorityQueues[47] = &pri47;
-    // list_init(&pri48);
-    // priorityQueues[48] = &pri48;
-    // list_init(&pri49);
-    // priorityQueues[49] = &pri49;
-    // list_init(&pri50);
-    // priorityQueues[50] = &pri50;
-    // list_init(&pri51);
-    // priorityQueues[51] = &pri51;
-    // list_init(&pri52);
-    // priorityQueues[52] = &pri52;
-    // list_init(&pri53);
-    // priorityQueues[53] = &pri53;
-    // list_init(&pri54);
-    // priorityQueues[54] = &pri54;
-    // list_init(&pri55);
-    // priorityQueues[55] = &pri55;
-    // list_init(&pri56);
-    // priorityQueues[56] = &pri56;
-    // list_init(&pri57);
-    // priorityQueues[57] = &pri57;
-    // list_init(&pri58);
-    // priorityQueues[58] = &pri58;
-    // list_init(&pri59);
-    // priorityQueues[59] = &pri59;
-    // list_init(&pri60);
-    // priorityQueues[60] = &pri60;
-    // list_init(&pri61);
-    // priorityQueues[61] = &pri61;
-    // list_init(&pri62);
-    // priorityQueues[62] = &pri62;
-    // list_init(&pri63);
-    // priorityQueues[63] = &pri63;
-    // for (int i = 62; i < PRI_MAX; i++) {
-    //   struct list *l = malloc(sizeof(struct list));
-    //   list_init(l);
-    //   priorityQueues[i] = l;
-    // }
-    load_avg = 0;
-  }
-
+  load_avg = 0;
   /* Set up a thread structure for the running thread. */
   initial_thread = running_thread ();
   init_thread (initial_thread, "main", PRI_DEFAULT);
@@ -481,12 +275,9 @@ thread_unblock (struct thread *t)
 
   old_level = intr_disable ();
   ASSERT (t->status == THREAD_BLOCKED);
-  if (!thread_mlfqs) {
+
     list_push_back (&ready_list, &t->elem);
-  } else {
-    //list_push_back (priorityQueues[t->priority], &t->qelem);
-    list_push_back (&ready_list, &t->elem);
-  }
+
   t->status = THREAD_READY;
   intr_set_level (old_level);
 }
@@ -557,12 +348,9 @@ thread_yield (void)
 
   old_level = intr_disable ();
   if (cur != idle_thread) {
-    if (!thread_mlfqs) {
+
       list_push_back (&ready_list, &cur->elem);
-    } else {
-      //list_push_back (priorityQueues[cur->priority], &cur->qelem);
-      list_push_back (&ready_list, &cur->elem);
-    }
+
   }
   cur->status = THREAD_READY;
   schedule ();
@@ -844,31 +632,14 @@ alloc_frame (struct thread *t, size_t size)
 static struct thread *
 next_thread_to_run (void)
 {
-  if (!thread_mlfqs) {
+
     if (list_empty (&ready_list))
       return idle_thread;
     else {
       list_sort(&ready_list, priority_sort, NULL);
       return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front
     }
-  } else {
-    // int i = PRI_MAX - 1;
-    // while (list_empty(priorityQueues[i]) && i >= PRI_MIN) {
-    //   i--;
-    // }
-    // if ( i < PRI_MIN) {
-    //   return idle_thread;
-    // }
-    // struct thread *t = list_entry (list_pop_front (priorityQueues[i]), struct thread, qelem);
-    // list_remove (&(t->elem));
-    // return t;
-    if (list_empty (&ready_list))
-      return idle_thread;
-    else {
-      list_sort(&ready_list, priority_sort, NULL);
-      return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front
-    }
-  }
+
 }
 
 /*
