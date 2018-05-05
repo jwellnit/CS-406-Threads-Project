@@ -368,10 +368,10 @@ thread_set_priority (int new_priority)
 {
   enum intr_level old_level;
   old_level = intr_disable ();
-  int temp = thread_current ()->priority;
+  //int temp = thread_current ()->priority;
  
   //thread tries to switch its priority	
-// thread_current ()->old_priority = temp;
+  //thread_current ()->old_priority = temp;
    thread_current ()->priority = new_priority;
 
   //priority donate multiple
@@ -520,8 +520,10 @@ init_thread (struct thread *t, const char *name, int priority)
   t->status = THREAD_BLOCKED;
   strlcpy (t->name, name, sizeof t->name);
   t->stack = (uint8_t *) t + PGSIZE;
+  
   t->old_priority = priority;	
-  //list_push_back(&old_priority_list, priority); //priority donate 
+  list_push_back(&old_priority_list, priority); //priority donate multiple
+	
   t->priority = priority;
 	
 	
