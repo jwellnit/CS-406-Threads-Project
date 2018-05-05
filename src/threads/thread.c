@@ -98,6 +98,7 @@ thread_init (void)
   list_init (&ready_list);
   list_init (&all_list);
   list_init (&lock_list);
+  list_init (&old_priority_donate);
 
   /* Set up a thread structure for the running thread. */
   initial_thread = running_thread ();
@@ -368,6 +369,10 @@ thread_set_priority (int new_priority)
   int temp = thread_current ()->priority;
   thread_current ()->old_priority = temp;
   thread_current ()->priority = new_priority;
+
+	//priority donate multiple
+  list_push_back(&old_priority_list, new_priority); 
+	
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
   intr_set_level (old_level);
@@ -511,8 +516,11 @@ init_thread (struct thread *t, const char *name, int priority)
   t->status = THREAD_BLOCKED;
   strlcpy (t->name, name, sizeof t->name);
   t->stack = (uint8_t *) t + PGSIZE;
-  t->old_priority = priority;
+  t->old_priority = priority;	
+  list_push_back(&old_priority_list, priority); //priority donate 
   t->priority = priority;
+	
+	
   t->magic = THREAD_MAGIC;
   list_push_back (&all_list, &t->allelem);
 }
@@ -667,6 +675,9 @@ priority_return(void){
 	//lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
 	cur->priority = cur->old_priority;
+	
+        cur->priority = list_pop_back(&old_priority_list);// pop the old priority for pd multiple
+	
   cur->donated_to = false;
 }
 
