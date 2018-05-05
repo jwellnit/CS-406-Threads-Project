@@ -1,4 +1,5 @@
 //#include "threads/synch.h"
+#include <stdlib.h>
 #include "threads/thread.h"
 #include <debug.h>
 #include <stddef.h>
@@ -14,7 +15,7 @@
 #include "threads/vaddr.h"
 #ifdef USERPROG
 #include "userprog/process.h"
-#include <stdlib.h>
+
 #endif
 
 /* Random value for struct thread's `magic' member.
