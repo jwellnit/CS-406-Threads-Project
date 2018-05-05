@@ -197,6 +197,7 @@ timer_interrupt (struct intr_frame *args UNUSED)
 {
   ticks++;
 
+  enum intr_level prv = intr_set_level(INTR_OFF);
   if ( thread_mlfqs && timer_ticks () % TIMER_FREQ == 0) {
     set_load_avg(thread_get_load_avg());
     struct list_elem *e;
@@ -207,14 +208,30 @@ timer_interrupt (struct intr_frame *args UNUSED)
         struct thread *f = list_entry (e, struct thread, elem);
         f->recent_cpu = calc_recent_cpu(f);
       }
+  } else if (thread_mlfqs && timer_ticks () % TIMER_FREQ != 0) {
+
   }
+  intr_set_level(prv);
 
   thread_tick ();
+
+  prv = intr_set_level(INTR_OFF);
+  if ( thread_mlfqs && timer_ticks () % 4 == 0) {
+    struct list_elem *g;
+
+    for (g = list_begin (get_all_list()); g != list_end (get_all_list());
+         g = list_next (g))
+      {
+        struct thread *t = list_entry (g, struct thread, elem);
+        t->priority = calc_priority(t);
+      }
+  }
+  intr_set_level(prv);
 
   /** POTENTIAL SOLUTION
   check here on the condition variable for each alarm
   */
-  enum intr_level prv = intr_set_level(INTR_OFF);
+  prv = intr_set_level(INTR_OFF);
   while (!list_empty(&alarmList)){
     struct alarm *next = list_entry(list_front(&alarmList), struct alarm, elem);
     if (next->end <= timer_ticks()) {
