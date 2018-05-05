@@ -369,11 +369,13 @@ thread_set_priority (int new_priority)
   enum intr_level old_level;
   old_level = intr_disable ();
   int temp = thread_current ()->priority;
-  thread_current ()->old_priority = temp;
-  thread_current ()->priority = new_priority;
+ 
+  //thread tries to switch its priority	
+// thread_current ()->old_priority = temp;
+   thread_current ()->priority = new_priority;
 
-	//priority donate multiple
-  //list_push_back(&old_priority_list, new_priority); 
+  //priority donate multiple
+  list_push_back(&old_priority_list, new_priority); 
 	
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
