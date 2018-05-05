@@ -32,6 +32,8 @@ static struct list all_list;
 /* List of all threads that have locks that cause conflict */
 static struct list lock_list;
 
+static struct list old_priority_list;           /*list for priority donate multiple*/
+
 /* Idle thread. */
 static struct thread *idle_thread;
 
