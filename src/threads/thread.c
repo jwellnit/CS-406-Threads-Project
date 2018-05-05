@@ -682,7 +682,7 @@ priority_return(void){
 	
 	if(cur->lower>-1){
 	  cur->priority = cur->lower;
-	  lower = -1;
+	  cur->lower = -1;
 	}else{
 	  cur->priority = cur->old_priority;
 	}
