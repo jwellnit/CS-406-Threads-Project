@@ -694,7 +694,7 @@ thread_get_recent_cpu (void)
 }
 
 int
-thread_get_recent_cpu (struct thread *t)
+calc_priority (struct thread *t)
 {
   struct fpoint *recent_cpu;
   fpoint_init(recent_cpu, 14, t->recent_cpu);
