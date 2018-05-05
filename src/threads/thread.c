@@ -641,7 +641,7 @@ priority_return(void){
 	//lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
 
-  printf("lower value =  \n");
+  //printf("lower value =  \n");
 
   if(cur->lower > -1){
       cur->priority = cur->lower;
