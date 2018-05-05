@@ -596,8 +596,6 @@ priority_donate(struct lock *lock){
   old_level = intr_disable ();
 
   struct thread *cur = thread_current(); //set a current thread
-
-
 	// if(lock_held_by_current_thread(lock)/*lock_try_acquire(lock)*/){ //current thread tries to acquire the lock
 	// 		return;
 	// 	//dont need to donate; return success
@@ -606,35 +604,18 @@ priority_donate(struct lock *lock){
     //  priority_return(); does not work here
       return;
 	  // lock_acquire_int(lock);
-	}else{
+	}
+  else{
 		//disable interrupts here
-    // enum intr_level old_level;
-    // old_level = intr_disable ();
-
 		struct thread *holder = lock->holder;
-    holder->donated_to = true;
-
-    //holder->donated_to = true;
-
-
     //list_push_back (&lock_list, &holder->lock_elem);
 
-    //intr_set_level (old_level);
-
-		// if(holder == 0) //check holder not 0
-		// 	lock_acquire_int(lock);
-		// 	//exit;
-
 		if(holder->priority < cur->priority){
-      // enum intr_level old_level;
-      // old_level = intr_disable ();
-
+      holder->donated_to = true;
       holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
-
-      //intr_set_level (old_level);
 		}
-		}
+}
   //  priority_return(); does not work here
   intr_set_level (old_level);
 }//end of priority_donate
