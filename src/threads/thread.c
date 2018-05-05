@@ -634,9 +634,17 @@ priority_return(void){
 	//return priority
 	//lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
-	cur->priority = cur->old_priority;
-  cur->donated_to = false;
-}
+
+  if(cur->lower > -1){
+      cur->priority = cur->lower;
+      cur->lower = -1;
+  }
+  else{
+    cur->priority = cur->old_priority;
+  }
+  
+       cur->donated_to = false;
+}//end priority_return
 
 /* Completes a thread switch by activating the new thread's page
    tables, and, if the previous thread is dying, destroying it.
