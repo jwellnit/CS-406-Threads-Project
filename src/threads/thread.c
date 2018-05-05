@@ -379,7 +379,7 @@ thread_set_priority (int new_priority)
   struct priority_elem x;
 	//x->elem = old_priority_list;
 	x.old_priority = new_priority;
-  list_push_back(&old_priority_list, &x.elem); 
+  list_push_back(&old_priority_list, x.elem); 
 	
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
