@@ -107,13 +107,6 @@ struct thread
     unsigned magic;                     /* Detects stack overflow. */
   };
 
-// an element int to go into the old priority list 
-struct priority_elem
-  {
-    struct list_elem elem;              /* List element. */
-    int old_priority; //stores the the old priority
-  };
-
 /* If false (default), use round-robin scheduler.
    If true, use multi-level feedback queue scheduler.
    Controlled by kernel command-line option "-o mlfqs". */
