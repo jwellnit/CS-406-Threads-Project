@@ -372,6 +372,7 @@ thread_set_priority (int new_priority)
   if(thread_current()->donated_to == true){
      //if(thread_current()->priority > new_priority){
         thread_current()->lower = new_priority;
+	//thread_current()->old_priority = new_priority;
      //}
      // else{
  	   //   thread_current ()->old_priority = thread_current ()->priority;
