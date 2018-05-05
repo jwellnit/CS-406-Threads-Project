@@ -789,7 +789,7 @@ next_thread_to_run (void)
       return idle_thread;
     }
     struct thread *t = list_entry (list_pop_front (priorityQueues[i]), struct thread, qelem);
-    list_remove (t->elem);
+    list_remove (&(t->elem));
     return t;
   }
 }
