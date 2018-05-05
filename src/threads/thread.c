@@ -654,6 +654,10 @@ priority_return(void){
        cur->donated_to = false;
 }//end priority_return
 
+int get_lower(void){
+  return thread_current ()->lower; 
+}
+
 /* Completes a thread switch by activating the new thread's page
    tables, and, if the previous thread is dying, destroying it.
 
