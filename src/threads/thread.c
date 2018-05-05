@@ -641,7 +641,7 @@ priority_return(void){
 	//lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
 
-  //printf("lower value = %d \n", cur->lower);
+  printf("lower value =  \n");
 
   if(cur->lower > -1){
       cur->priority = cur->lower;
@@ -655,7 +655,7 @@ priority_return(void){
 }//end priority_return
 
 int get_lower(void){
-  return thread_current ()->lower; 
+  return thread_current ()->lower;
 }
 
 /* Completes a thread switch by activating the new thread's page
