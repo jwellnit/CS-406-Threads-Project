@@ -246,6 +246,7 @@ enum intr_level old_level;
 old_level = intr_disable ();
 sema_down (&lock->semaphore);
 lock->holder = thread_current ();
+thread_current()->locked = true;
 intr_set_level (old_level);
 }
 
@@ -267,8 +268,10 @@ lock_try_acquire (struct lock *lock)
 
 enum intr_level old_level;
 old_level = intr_disable ();
-if (success)
+if (success){
     lock->holder = thread_current ();
+    thread_current()->locked = true;
+}
 intr_set_level (old_level);
 priority_return();
   return success;
@@ -286,6 +289,7 @@ lock_release (struct lock *lock)
   ASSERT (lock_held_by_current_thread (lock));
 
   lock->holder = NULL;
+  thread_current()->locked=false;
   sema_up (&lock->semaphore);
 
 
