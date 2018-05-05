@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include <random.h>
 #include <stdio.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 #include <string.h>
 #include "threads/flags.h"
 #include "threads/interrupt.h"
@@ -473,7 +473,12 @@ thread_unblock (struct thread *t)
 
   old_level = intr_disable ();
   ASSERT (t->status == THREAD_BLOCKED);
-  list_push_back (&ready_list, &t->elem);
+  if (!thread_mlfqs) {
+    list_push_back (&ready_list, &t->elem);
+  } else {
+    list_push_back (priorityQueues[t->priority], &t->elem);
+    //list_push_back (&ready_list, &t->elem);
+  }
   t->status = THREAD_READY;
   intr_set_level (old_level);
 }
@@ -543,8 +548,13 @@ thread_yield (void)
   ASSERT (!intr_context ());
 
   old_level = intr_disable ();
-  if (cur != idle_thread)
-    list_push_back (&ready_list, &cur->elem);
+  if (cur != idle_thread) {
+    if (!thread_mlfqs) {
+      list_push_back (&ready_list, &cur->elem);
+    } else {
+      list_push_back (priorityQueues[&cur->priority], &cur->elem);
+    }
+  }
   cur->status = THREAD_READY;
   schedule ();
   intr_set_level (old_level);
@@ -574,13 +584,17 @@ thread_foreach (thread_action_func *func, void *aux)
 void
 thread_set_priority (int new_priority)
 {
-  enum intr_level old_level;
-  old_level = intr_disable ();
-  //thread_current ()->old_priority = thread_current ()->priority;
-  thread_current ()->priority = new_priority;
-  list_sort(&ready_list, priority_sort, NULL);
-  thread_yield();
-  intr_set_level (old_level);
+  if (!thread_mlfqs) {
+    enum intr_level old_level;
+    old_level = intr_disable ();
+    //thread_current ()->old_priority = thread_current ()->priority;
+    thread_current ()->priority = new_priority;
+    list_sort(&ready_list, priority_sort, NULL);
+    thread_yield();
+    intr_set_level (old_level);
+  } else {
+    return;
+  }
 
 }
 
@@ -763,12 +777,14 @@ next_thread_to_run (void)
       return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front
     }
   } else {
-    if (list_empty (&ready_list))
-      return idle_thread;
-    else {
-      list_sort(&ready_list, priority_sort, NULL);
-      return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front
+    int i = PRI_MAX - 1;
+    while (list_empty(priorityQueues[i]) && i >= PRI_MIN) {
+      i--;
     }
+    if ( i < PRI_MIN) {
+      return idle_thread;
+    }
+    return list_entry (list_pop_front (priorityQueues[i]), struct thread, elem); //switched it back to pop_front
   }
 }
 
