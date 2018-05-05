@@ -353,6 +353,10 @@ thread_tick (void)
   else
     kernel_ticks++;
 
+  if (t != idle_thread) {
+    t->recent_cpu+=1;
+  }
+
   /* Enforce preemption. */
   if (++thread_ticks >= TIME_SLICE)
     intr_yield_on_return ();
@@ -673,8 +677,14 @@ thread_get_load_avg (void)
 int
 thread_get_recent_cpu (void)
 {
+  return thread_current()->recent_cpu;
+}
+
+int
+calc_recent_cpu (struct thread *t)
+{
   struct fpoint *working;
-  fpoint_init(working, 14, thread_current()->recent_cpu);
+  fpoint_init(working, 14, t->recent_cpu);
   fpoint_div_int (working, 100, working);
   struct fpoint *loadavg;
   fpoint_init(loadavg, 14, load_avg);
@@ -687,7 +697,7 @@ thread_get_recent_cpu (void)
   fpoint_add_int(temp1, 1, temp2);
   fpoint_div(temp1, temp2, temp1);
   fpoint_mult(working, temp1, working);
-  fpoint_add_int(working, thread_current()->nice, working);
+  fpoint_add_int(working, t->nice, working);
   fpoint_mult_int(working,100,working);
   int ret = fpoint_to_int_nearest(working);
   return ret;
