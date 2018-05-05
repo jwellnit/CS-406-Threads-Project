@@ -198,10 +198,10 @@ timer_interrupt (struct intr_frame *args UNUSED)
   ticks++;
 
   if ( thread_mlfqs && timer_ticks () % TIMER_FREQ == 0) {
-    load_avg=thread_get_load_avg();
+    set_load_avg(thread_get_load_avg());
     struct list_elem *e;
 
-    for (e = list_begin (&all_list); e != list_end (&all_list);
+    for (e = list_begin (get_all_list()); e != list_end (get_all_list());
          e = list_next (e))
       {
         struct thread *f = list_entry (e, struct thread, elem);

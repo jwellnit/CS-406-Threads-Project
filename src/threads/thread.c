@@ -721,7 +721,15 @@ calc_priority (struct thread *t)
   int ret = fpoint_to_int_nearest(working);
   return ret;
 }
-
+
+struct list * get_all_list() {
+  return &all_list;
+}
+
+void set_load_avg(int n) {
+  load_avg = n;
+}
+
 /* Idle thread.  Executes when no other thread is ready to run.
 
    The idle thread is initially put on the ready list by
