@@ -374,7 +374,7 @@ thread_set_priority (int new_priority)
 
         thread_current()->lower = new_priority;
 
-        ASSERT(thread_current ()->lower == -1);
+        printf("this is lower %d\n", thread_current()->lower );
 
         return;
 
