@@ -172,15 +172,15 @@ thread_init (void)
 
   if (thread_mlfqs) {
     list_init(&pri0);
-    priorityQueues[0] = pri0;
+    priorityQueues[0] = &pri0;
     list_init(&pri1);
-    priorityQueues[1] = pri1;
+    priorityQueues[1] = &pri1;
     list_init(&pri2);
-    priorityQueues[2] = pri2;
+    priorityQueues[2] = &pri2;
     list_init(&pri3);
-    priorityQueues[3] = pri3;
+    priorityQueues[3] = &pri3;
     list_init(&pri4);
-    priorityQueues[4] = pri4;
+    priorityQueues[4] = &pri4;
     // for (int i = 0; i < PRI_MAX; i++) {
     //   struct list *l = malloc(sizeof(struct list));
     //   list_init(l);
