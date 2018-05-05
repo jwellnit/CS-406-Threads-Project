@@ -605,6 +605,8 @@ priority_donate(struct lock *lock){
 		struct thread *holder = lock->holder;
     holder->donated_to = true;
 
+    thread_yield();
+    
     list_push_back (&lock_list, &holder->lock_elem);
 
     intr_set_level (old_level);
@@ -642,7 +644,7 @@ priority_return(void){
   else{
     cur->priority = cur->old_priority;
   }
-  
+
        cur->donated_to = false;
 }//end priority_return
 
