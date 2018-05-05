@@ -35,7 +35,7 @@ static struct list lock_list;
 
 /* mlfq specific */
 /* array of queues */
-static struct list *priorityQueues[PRI_MAX];
+static struct list *priorityQueues[PRI_MAX+1];
 
 /* individual priority queues */
 static struct list pri0;
