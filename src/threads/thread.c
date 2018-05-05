@@ -366,8 +366,8 @@ thread_set_priority (int new_priority)
   enum intr_level old_level;
   old_level = intr_disable ();
 
-
-
+ASSERT(thread_current()->donated_to == true);
+ASSERT(thread_current()->donated_to != true);
    //check if a thread is locked
   if(thread_current()->donated_to == true){
      //if(thread_current()->priority > new_priority){
