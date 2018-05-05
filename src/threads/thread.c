@@ -56,7 +56,7 @@ struct kernel_thread_frame
 struct priority_elem
   {
     struct list_elem elem;              /* List element. */
-    int old_priority; //stores the the old priority
+    int old_priorityA; //stores the the old priority
   };
 
 /* Statistics. */
@@ -384,7 +384,7 @@ thread_set_priority (int new_priority)
 
   //priority donate multiple
   struct priority_elem x;
-  x.old_priority = new_priority;
+  x.old_priorityA = new_priority;
   list_push_back(&old_priority_list, &x.elem); 
 	
   list_sort(&ready_list, priority_sort, NULL);
@@ -532,7 +532,7 @@ init_thread (struct thread *t, const char *name, int priority)
   t->stack = (uint8_t *) t + PGSIZE;
   
   t->old_priority = priority;	
-  list_push_back(&old_priority_list, priority); //priority donate multiple
+  //list_push_back(&old_priority_list, priority); //priority donate multiple
 	
   t->priority = priority;
 	
