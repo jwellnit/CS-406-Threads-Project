@@ -369,7 +369,7 @@ thread_set_priority (int new_priority)
 
 
    //check if a thread is locked
-  if(thread_current()->donated_to == true){
+  if(thread_current()->donated_to != true){
      //if(thread_current()->priority > new_priority){
 
         thread_current()->lower = new_priority;
