@@ -103,6 +103,8 @@ static struct list pri61;
 static struct list pri62;
 static struct list pri63;
 
+static int load_avg;
+
 /* Idle thread. */
 static struct thread *idle_thread;
 
@@ -304,6 +306,7 @@ thread_init (void)
     //   list_init(l);
     //   priorityQueues[i] = l;
     // }
+    load_avg = 0;
   }
 
   /* Set up a thread structure for the running thread. */
@@ -476,8 +479,8 @@ thread_unblock (struct thread *t)
   if (!thread_mlfqs) {
     list_push_back (&ready_list, &t->elem);
   } else {
-    list_push_back (priorityQueues[t->priority], &t->elem);
-    //list_push_back (&ready_list, &t->elem);
+    list_push_back (priorityQueues[t->priority], &t->qelem);
+    list_push_back (&ready_list, &t->elem);
   }
   t->status = THREAD_READY;
   intr_set_level (old_level);
@@ -552,7 +555,8 @@ thread_yield (void)
     if (!thread_mlfqs) {
       list_push_back (&ready_list, &cur->elem);
     } else {
-      list_push_back (priorityQueues[cur->priority], &cur->elem);
+      list_push_back (priorityQueues[cur->priority], &cur->qelem);
+      list_push_back (&ready_list, &cur->elem);
     }
   }
   cur->status = THREAD_READY;
@@ -784,7 +788,9 @@ next_thread_to_run (void)
     if ( i < PRI_MIN) {
       return idle_thread;
     }
-    return list_entry (list_pop_front (priorityQueues[i]), struct thread, elem); //switched it back to pop_front
+    struct thread *t = list_entry (list_pop_front (priorityQueues[i]), struct thread, qelem);
+    list_remove (t->elem);
+    return t;
   }
 }
 

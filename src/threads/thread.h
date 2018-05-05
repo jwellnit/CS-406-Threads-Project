@@ -92,6 +92,7 @@ struct thread
     int priority;                       /* Priority. */
   int old_priority;                     /*save old priority for priority donation*/
     struct list_elem allelem;           /* List element for all threads list. */
+    struct list_elem qelem;             /* List element for feedbck queues. */
 
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
