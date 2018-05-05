@@ -14,6 +14,7 @@
 #include "threads/vaddr.h"
 #ifdef USERPROG
 #include "userprog/process.h"
+#include <stdlib>
 #endif
 
 /* Random value for struct thread's `magic' member.
@@ -375,7 +376,10 @@ thread_set_priority (int new_priority)
    thread_current ()->priority = new_priority;
 
   //priority donate multiple
-  list_push_back(&old_priority_list, new_priority); 
+  struct priority_elem x;
+	//x->elem = old_priority_list;
+	x.old_priority = new_priority;
+  list_push_back(&old_priority_list, &x->elem); 
 	
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
