@@ -365,6 +365,8 @@ thread_foreach (thread_action_func *func, void *aux)
 void
 thread_set_priority (int new_priority)
 {
+  ASSERT(donated_to==true);
+  ASSERT(donated_to==false);
   enum intr_level old_level;
   old_level = intr_disable ();
 
