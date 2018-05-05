@@ -290,6 +290,7 @@ lock_release (struct lock *lock)
 
 
   if(thread_current() ->donated_to == true){
+    printf("lower value = %d \n", thread_current()->lower);
     priority_return();
   }
 
