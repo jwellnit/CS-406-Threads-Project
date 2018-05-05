@@ -165,6 +165,18 @@ thread_init (void)
 {
   ASSERT (intr_get_level () == INTR_OFF);
 
+  lock_init (&tid_lock);
+  list_init (&ready_list);
+  list_init (&all_list);
+  list_init (&lock_list);
+
+  /* Set up a thread structure for the running thread. */
+  initial_thread = running_thread ();
+  init_thread (initial_thread, "main", PRI_DEFAULT);
+  initial_thread->status = THREAD_RUNNING;
+  initial_thread->tid = allocate_tid ();
+  initial_thread->nice = 0;
+
   if (thread_mlfqs) {
     // list_init(&pri0);
     // priorityQueues[0] = pri0;
@@ -182,18 +194,6 @@ thread_init (void)
       priorityQueues[i] = l;
     }
   }
-
-  lock_init (&tid_lock);
-  list_init (&ready_list);
-  list_init (&all_list);
-  list_init (&lock_list);
-
-  /* Set up a thread structure for the running thread. */
-  initial_thread = running_thread ();
-  init_thread (initial_thread, "main", PRI_DEFAULT);
-  initial_thread->status = THREAD_RUNNING;
-  initial_thread->tid = allocate_tid ();
-  initial_thread->nice = 0;
 }
 
 /* Starts preemptive thread scheduling by enabling interrupts.
