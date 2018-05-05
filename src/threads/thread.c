@@ -476,7 +476,7 @@ thread_unblock (struct thread *t)
   if (!thread_mlfqs) {
     list_push_back (&ready_list, &t->elem);
   } else {
-    list_push_back (priorityQueues[t.priority], &t->elem);
+    list_push_back (priorityQueues[t->priority], &t->elem);
     //list_push_back (&ready_list, &t->elem);
   }
   t->status = THREAD_READY;
@@ -552,7 +552,7 @@ thread_yield (void)
     if (!thread_mlfqs) {
       list_push_back (&ready_list, &cur->elem);
     } else {
-      list_push_back (priorityQueues[cur.priority], &cur->elem);
+      list_push_back (priorityQueues[cur->priority], &cur->elem);
     }
   }
   cur->status = THREAD_READY;
