@@ -211,7 +211,7 @@ thread_create (const char *name, int priority,
   sf->eip = switch_entry;
   sf->ebp = 0;
   
-  lower = -1;
+  t->lower = -1;
 	
   t->donated_to = false;
   intr_set_level (old_level);
@@ -371,7 +371,7 @@ thread_set_priority (int new_priority)
    //check if a thread is locked
   if(thread_current()->donated_to==true){
      if(thread_current()->priority>new_priority){
-        lower = new_priority;
+        thread_current()->lower = new_priority;
      }else{
  	 thread_current ()->old_priority = thread_current ()->priority;
   	 thread_current ()->priority = new_priority;
@@ -680,8 +680,8 @@ priority_return(void){
 	//lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
 	
-	if(lower>-1){
-	  cur->priority = lower;
+	if(cur->lower>-1){
+	  cur->priority = cur->lower;
 	  lower = -1;
 	}else{
 	  cur->priority = cur->old_priority;
