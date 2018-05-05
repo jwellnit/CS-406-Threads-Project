@@ -210,7 +210,7 @@ thread_create (const char *name, int priority,
   sf = alloc_frame (t, sizeof *sf);
   sf->eip = switch_entry;
   sf->ebp = 0;
-  
+
   t->lower = -1;
   t->locked = false;
   t->donated_to = false;
@@ -367,19 +367,21 @@ thread_set_priority (int new_priority)
 {
   enum intr_level old_level;
   old_level = intr_disable ();
-  
+
    //check if a thread is locked
-  if(thread_current()->locked==true){
-     if(thread_current()->priority>new_priority){
+  if(thread_current()->donated_to == true){
+     //if(thread_current()->priority > new_priority){
         thread_current()->lower = new_priority;
-     }else{
- 	 thread_current ()->old_priority = thread_current ()->priority;
-  	 thread_current ()->priority = new_priority;
-	 list_sort(&ready_list, priority_sort, NULL);
-     }
-  }else{
-  	int temp = thread_current ()->priority;
-  	thread_current ()->old_priority = temp;
+     //}
+     // else{
+ 	   //   thread_current ()->old_priority = thread_current ()->priority;
+  	 //   thread_current ()->priority = new_priority;
+	   //   list_sort(&ready_list, priority_sort, NULL);
+     //  }
+  }
+  else{
+
+    thread_current ()->old_priority = thread_current ()->priority;
   	thread_current ()->priority = new_priority;
   	list_sort(&ready_list, priority_sort, NULL);
   }
@@ -679,7 +681,7 @@ priority_return(void){
 	//return priority
 	//lock_release(lock);
 	struct thread *cur = thread_current(); //set a current thread
-	
+
 	if(cur->lower>-1){
 	  cur->priority = cur->lower;
 	  cur->lower = -1;
