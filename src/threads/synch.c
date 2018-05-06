@@ -289,7 +289,7 @@ lock_release (struct lock *lock)
   ASSERT (lock != NULL);
   ASSERT (lock_held_by_current_thread (lock));
 //  ASSERT(thread_current()->donated_to != true);
-  ASSERT(thread_current()->lower != -1);
+  //ASSERT(thread_current()->lower != -1);
   enum intr_level old_level;
   old_level = intr_disable ();
 
