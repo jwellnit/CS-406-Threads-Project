@@ -639,7 +639,7 @@ priority_return(void){
   //printf("lower value =  \n");
 //  printf("this is lower %d\n", thread_current()->lower );
   //
-  ASSERT(thread_current()->lower != -1);
+  //ASSERT(thread_current()->lower != -1);
   if(thread_current()->lower != -1){
       thread_current()->priority = thread_current()->lower;
       thread_current()->lower = -1;
@@ -650,7 +650,7 @@ priority_return(void){
 
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
-  
+
    intr_set_level (old_level);
        //cur->donated_to = false;
 }//end priority_return
