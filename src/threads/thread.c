@@ -193,12 +193,12 @@ thread_create (const char *name, int priority,
     return TID_ERROR;
 
   /* Initialize thread. */
-  init_thread (t, name, priority);
-  tid = t->tid = allocate_tid ();
   if (thread_mlfqs) {
     t->nice = thread_current()->nice;
     t->recent_cpu = thread_current()->recent_cpu;
   }
+  init_thread (t, name, priority);
+  tid = t->tid = allocate_tid ();
 
   /* Prepare thread for first run by initializing its stack.
      Do this atomically so intermediate values for the 'stack'
@@ -529,7 +529,7 @@ init_thread (struct thread *t, const char *name, int priority)
     t->old_priority = priority;
     t->priority = priority;
   } else {
-
+    t->priority = PRI_MAX;
   }
   t->magic = THREAD_MAGIC;
   list_push_back (&all_list, &t->allelem);
