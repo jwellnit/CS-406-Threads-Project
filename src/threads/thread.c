@@ -617,7 +617,7 @@ priority_donate(struct lock *lock){
       ASSERT(holder->donated_to == true);
 
       holder->priority = cur->priority; //donate
-			lock_acquire_int(lock);
+			//lock_acquire_int(lock);
 		}
 }
   //  priority_return(); does not work here
