@@ -613,6 +613,9 @@ priority_donate(struct lock *lock){
 
 		if(holder->priority < cur->priority){
       holder->donated_to = true;
+
+      ASSERT(thread_current()->donated_to == true);
+
       holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
 		}
@@ -628,6 +631,7 @@ priority_return(void){
 	//release lock
 	//return priority
 	//lock_release(lock);
+  ASSERT(thread_current()->donated_to == true);
 	struct thread *cur = thread_current(); //set a current thread
 
   //printf("lower value =  \n");
