@@ -651,8 +651,9 @@ priority_return(void){
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
 
+  cur->donated_to = false;
    intr_set_level (old_level);
-       //cur->donated_to = false;
+
 }//end priority_return
 
 int get_lower(void){
