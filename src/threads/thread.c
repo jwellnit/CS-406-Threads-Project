@@ -481,6 +481,12 @@ calc_priority (struct thread *t, void *aux)
   fpoint_sub(&pri_max, &recent_cpu, &working);
   fpoint_sub(&working, &nice, &working);
   int ret = fpoint_to_int_nearest(&working);
+  if (ret > PRI_MAX) {
+    ret = PRI_MAX;
+  }
+  if (ret < PRI_MIN) {
+    ret = PRI_MIN;
+  }
   t->priority = ret;
   return ret;
 }
