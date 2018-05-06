@@ -634,7 +634,8 @@ priority_return(void){
   //ASSERT(thread_current()->donated_to == true);
   enum intr_level old_level;
   old_level = intr_disable ();
-	struct thread *cur = thread_current(); //set a current thread
+
+  struct thread *cur = thread_current(); //set a current thread
 
   //printf("lower value =  \n");
 //  printf("this is lower %d\n", thread_current()->lower );
@@ -652,6 +653,7 @@ priority_return(void){
   thread_yield();
 
   cur->donated_to = false;
+
    intr_set_level (old_level);
 
 }//end priority_return
