@@ -620,6 +620,7 @@ priority_donate(struct lock *lock){
       ASSERT(holder->donated_to == true);
 
       holder->priority = cur->priority; //donate
+      lock_acquire_int(lock);
       intr_set_level (old_level);
       //lock_acquire_int(lock);
 
