@@ -445,19 +445,20 @@ thread_get_recent_cpu (void)
 int
 calc_priority (struct thread *t)
 {
-  struct fpoint *recent_cpu;
-  fpoint_init(recent_cpu, 14, t->recent_cpu);
-  fpoint_div_int (recent_cpu, 400, recent_cpu);
-  struct fpoint *pri_max;
-  fpoint_init(pri_max, 14, PRI_MAX);
-  struct fpoint *nice;
-  fpoint_init(nice, 14, t->nice);
-  fpoint_mult_int(nice, 2, nice);
-  struct fpoint *working;
-  fpoint_init(working, 14, 0);
-  fpoint_sub(pri_max, recent_cpu, working);
-  fpoint_sub(working, nice, working);
-  int ret = fpoint_to_int_nearest(working);
+  ret = PRI_MAX;
+  // struct fpoint *recent_cpu;
+  // fpoint_init(recent_cpu, 14, t->recent_cpu);
+  // fpoint_div_int (recent_cpu, 400, recent_cpu);
+  // struct fpoint *pri_max;
+  // fpoint_init(pri_max, 14, PRI_MAX);
+  // struct fpoint *nice;
+  // fpoint_init(nice, 14, t->nice);
+  // fpoint_mult_int(nice, 2, nice);
+  // struct fpoint *working;
+  // fpoint_init(working, 14, 0);
+  // fpoint_sub(pri_max, recent_cpu, working);
+  // fpoint_sub(working, nice, working);
+  // int ret = fpoint_to_int_nearest(working);
   return ret;
 }
 
