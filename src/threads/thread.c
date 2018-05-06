@@ -145,6 +145,10 @@ thread_tick (void)
   else
     kernel_ticks++;
 
+  if (t != idle_thread) {
+    t->recent_cpu = t->recent_cpu + 1;
+  }
+
   /* Enforce preemption. */
   if (++thread_ticks >= TIME_SLICE)
     intr_yield_on_return ();
