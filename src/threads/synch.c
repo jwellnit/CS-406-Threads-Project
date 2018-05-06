@@ -288,12 +288,13 @@ lock_release (struct lock *lock)
 {
   ASSERT (lock != NULL);
   ASSERT (lock_held_by_current_thread (lock));
-
+  ASSERT(thread_current()->donated_to != true);
   lock->holder = NULL;
   sema_up (&lock->semaphore);
 
-ASSERT(thread_current()->donated_to == true);
+
   if(thread_current() ->donated_to == true){
+    ASSERT(thread_current()->donated_to == true);
 
     priority_return();
   }
