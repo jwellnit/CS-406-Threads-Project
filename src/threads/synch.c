@@ -292,8 +292,9 @@ lock_release (struct lock *lock)
   lock->holder = NULL;
   sema_up (&lock->semaphore);
 
-
+ASSERT(thread_current()->donated_to == true);
   if(thread_current() ->donated_to == true){
+
     priority_return();
   }
 
