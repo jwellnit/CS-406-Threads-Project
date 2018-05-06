@@ -603,6 +603,7 @@ priority_donate(struct lock *lock){
 
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
     //  priority_return(); does not work here
+    holder->donated_to = true;
       return;
 	  // lock_acquire_int(lock);
 	}
