@@ -377,7 +377,7 @@ thread_set_priority (int new_priority)
 
         //printf("this is lower %d\n", thread_current()->lower );
 
-      
+
 
      //}
      // else{
@@ -638,7 +638,7 @@ priority_return(void){
 
   //printf("lower value =  \n");
 //  printf("this is lower %d\n", thread_current()->lower );
-  ASSERT(thread_current()->lower != -1);
+  //ASSERT(thread_current()->lower != -1);
   if(thread_current()->lower != -1){
       thread_current()->priority = thread_current()->lower;
       thread_current()->lower = -1;
