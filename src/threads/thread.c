@@ -617,8 +617,14 @@ priority_donate(struct lock *lock){
       ASSERT(holder->donated_to == true);
 
       holder->priority = cur->priority; //donate
-      lock_try_acquire(lock);
-      //lock_acquire_int(lock);
+      //lock_try_acquire(lock);
+
+
+      list_sort(&ready_list, priority_sort, NULL);
+      thread_yield();
+
+
+      lock_acquire_int(lock);
 		}
 }
   //  priority_return(); does not work here
