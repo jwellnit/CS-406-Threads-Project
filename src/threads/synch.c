@@ -301,7 +301,7 @@ lock_release (struct lock *lock)
 
     //ASSERT(thread_current()->donated_to == true);
 
-    printf("donated_to = %d\n", thread_current()->donated_to );
+    printf("donated_to = %s\n", thread_current()->donated_to );
     priority_return();
   }
 intr_set_level (old_level);
