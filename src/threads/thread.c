@@ -377,7 +377,7 @@ thread_set_priority (int new_priority)
 
         //printf("this is lower %d\n", thread_current()->lower );
 
-        return;
+      
 
      //}
      // else{
