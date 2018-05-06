@@ -593,8 +593,8 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 void
 priority_donate(struct lock *lock){
 
-  enum intr_level old_level;
-  old_level = intr_disable ();
+  // enum intr_level old_level;
+  // old_level = intr_disable ();
 
   struct thread *cur = thread_current(); //set a current thread
 
@@ -613,22 +613,28 @@ priority_donate(struct lock *lock){
 
 		if(holder->priority < cur->priority){
 
+      enum intr_level old_level;
+      old_level = intr_disable ();
+
       holder->donated_to = true;
       ASSERT(holder->donated_to == true);
 
       holder->priority = cur->priority; //donate
+      intr_set_level (old_level);
+      //lock_acquire_int(lock);
+
       //lock_try_acquire(lock);
 
 
       list_sort(&ready_list, priority_sort, NULL);
       thread_yield();
+      lock_try_acquire(lock);
 
-
-      lock_acquire_int(lock);
+      //lock_acquire_int(lock);
 		}
 }
   //  priority_return(); does not work here
-  intr_set_level (old_level);
+
 }//end of priority_donate
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
