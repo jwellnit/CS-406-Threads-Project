@@ -442,7 +442,7 @@ thread_get_recent_cpu (void)
 }
 
 int
-calc_priority (struct thread *t)
+calc_priority (struct thread *t, void *aux)
 {
   //int ret = PRI_MAX;
   struct fpoint recent_cpu;
@@ -458,6 +458,7 @@ calc_priority (struct thread *t)
   fpoint_sub(&pri_max, &recent_cpu, &working);
   fpoint_sub(&working, &nice, &working);
   int ret = fpoint_to_int_nearest(&working);
+  t->priority = ret;
   return ret;
 }
 

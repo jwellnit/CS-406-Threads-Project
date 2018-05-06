@@ -198,6 +198,10 @@ timer_interrupt (struct intr_frame *args UNUSED)
   ticks++;
   thread_tick ();
 
+  if (thread_mlfq && timer_ticks() % 4 == 0) {
+    thread_foreach(calc_priority, NULL)
+  }
+
   /** POTENTIAL SOLUTION
   check here on the condition variable for each alarm
   */
