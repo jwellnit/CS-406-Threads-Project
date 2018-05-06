@@ -445,8 +445,8 @@ int
 calc_priority (struct thread *t)
 {
   int ret = PRI_MAX;
-  struct fpoint *recent_cpu;
-  fpoint_init(recent_cpu, 14, t->recent_cpu);
+  struct fpoint recent_cpu;
+  fpoint_init(&recent_cpu, 14, t->recent_cpu);
   // fpoint_div_int (recent_cpu, 400, recent_cpu);
   // struct fpoint *pri_max;
   // fpoint_init(pri_max, 14, PRI_MAX);
