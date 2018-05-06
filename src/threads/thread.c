@@ -447,23 +447,23 @@ thread_get_recent_cpu (void)
 int
 calc_recent_cpu (struct thread *t, void *aux)
 {
-  struct fpoint *working;
-  fpoint_init(working, 14, t->recent_cpu);
-  fpoint_div_int (working, 100, working);
-  struct fpoint *loadavg;
-  fpoint_init(loadavg, 14, load_avg);
-  fpoint_div_int (loadavg, 100, loadavg);
-  struct fpoint *temp1;
-  fpoint_init(temp1, 14, 0);
-  fpoint_mult_int(loadavg, 2, temp1);
-  struct fpoint *temp2;
-  fpoint_init(temp2, 14, 0);
-  fpoint_add_int(temp1, 1, temp2);
-  fpoint_div(temp1, temp2, temp1);
-  fpoint_mult(working, temp1, working);
-  fpoint_add_int(working, t->nice, working);
-  fpoint_mult_int(working,100,working);
-  int ret = fpoint_to_int_nearest(working);
+  struct fpoint working;
+  fpoint_init(&working, 14, t->recent_cpu);
+  fpoint_div_int (&working, 100, &working);
+  struct fpoint loadavg;
+  fpoint_init(&loadavg, 14, load_avg);
+  fpoint_div_int (&loadavg, 100, &loadavg);
+  struct fpoint temp1;
+  fpoint_init(&temp1, 14, 0);
+  fpoint_mult_int(&loadavg, 2, &temp1);
+  struct fpoint temp2;
+  fpoint_init(&temp2, 14, 0);
+  fpoint_add_int(&temp1, 1, &temp2);
+  fpoint_div(&temp1, &temp2, &temp1);
+  fpoint_mult(&working, &temp1, &working);
+  fpoint_add_int(&working, t->nice, &working);
+  fpoint_mult_int(&working,100,&working);
+  int ret = fpoint_to_int_nearest(&working);
   t->recent_cpu = ret;
   return ret;
 }
