@@ -613,9 +613,9 @@ priority_donate(struct lock *lock){
     //list_push_back (&lock_list, &holder->lock_elem);
 
 		if(holder->priority < cur->priority){
-      holder->donated_to = true;
 
-      ASSERT(thread_current()->donated_to == true);
+      holder->donated_to = true;
+      ASSERT(holder->donated_to == true);
 
       holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
