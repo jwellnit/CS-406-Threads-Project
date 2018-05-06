@@ -597,9 +597,8 @@ priority_donate(struct lock *lock){
   old_level = intr_disable ();
 
   struct thread *cur = thread_current(); //set a current thread
-	// if(lock_held_by_current_thread(lock)/*lock_try_acquire(lock)*/){ //current thread tries to acquire the lock
-	// 		return;
-	// 	//dont need to donate; return success
+
+ 	//dont need to donate; return success
 
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
     //  priority_return(); does not work here
@@ -615,7 +614,7 @@ priority_donate(struct lock *lock){
 		if(holder->priority < cur->priority){
 
       holder->donated_to = true;
-      ASSERT(holder->donated_to == true);
+      ASSERT(holderk->donated_to == true);
 
       holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
@@ -645,7 +644,7 @@ priority_return(void){
     cur->priority = cur->old_priority;
   }
 
-       cur->donated_to = false;
+       //cur->donated_to = false;
 }//end priority_return
 
 int get_lower(void){
