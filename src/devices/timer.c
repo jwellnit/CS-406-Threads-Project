@@ -198,7 +198,7 @@ timer_interrupt (struct intr_frame *args UNUSED)
   ticks++;
   thread_tick ();
 
-  if (thread_mlfq && timer_ticks() % 4 == 0) {
+  if (get_mlfq() && timer_ticks() % 4 == 0) {
     thread_foreach(calc_priority, NULL);
   }
 
