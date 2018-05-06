@@ -463,7 +463,7 @@ calc_priority (struct thread *t, void *aux)
 }
 
 bool get_mlfq() {
-  return thread_mlfq;
+  return thread_mlfqs;
 }
 
 /* Idle thread.  Executes when no other thread is ready to run.
