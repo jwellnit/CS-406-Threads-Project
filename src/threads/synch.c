@@ -245,7 +245,7 @@ lock_acquire_int (struct lock *lock)
   ASSERT (lock != NULL);
   ASSERT (!intr_context ());
   ASSERT (!lock_held_by_current_thread (lock));
-  ASSERT (lock->holder == NULL);
+  //ASSERT (lock->holder == NULL);
 enum intr_level old_level;
 old_level = intr_disable ();
 sema_down (&lock->semaphore);
