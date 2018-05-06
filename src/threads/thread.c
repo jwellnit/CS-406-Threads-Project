@@ -375,7 +375,7 @@ thread_set_priority (int new_priority)
 
         thread_current()->lower = new_priority;
 
-        printf("this is lower %d\n", thread_current()->lower );
+        //printf("this is lower %d\n", thread_current()->lower );
 
         return;
 
@@ -632,10 +632,12 @@ priority_return(void){
 	//return priority
 	//lock_release(lock);
   //ASSERT(thread_current()->donated_to == true);
+  enum intr_level old_level;
+  old_level = intr_disable ();
 	struct thread *cur = thread_current(); //set a current thread
 
   //printf("lower value =  \n");
-
+  printf("this is lower %d\n", thread_current()->lower );
   if(thread_current()->lower != -1){
       thread_current()->priority = thread_current()->lower;
       thread_current()->lower = -1;
@@ -643,7 +645,7 @@ priority_return(void){
   else{
     cur->priority = cur->old_priority;
   }
-
+   intr_set_level (old_level);
        //cur->donated_to = false;
 }//end priority_return
 
