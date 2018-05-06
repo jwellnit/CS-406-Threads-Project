@@ -433,8 +433,25 @@ thread_get_nice (void)
 int
 thread_get_load_avg (void)
 {
-  /* Not yet implemented. */
-  return 0;
+  struct fpoint working;
+  fpoint_init(&working, 14, load_avg);
+  fpoint_div_int (&working, 100, &working);
+  struct fpoint ratio1;
+  fpoint_init(&ratio1, 14, 59);
+  fpoint_div_int (&ratio1, 60, &ratio1);
+  struct fpoint ratio2;
+  fpoint_init(&ratio2, 14, 1);
+  fpoint_div_int (&ratio2, 60, &ratio2);
+  struct fpoint temp1;
+  fpoint_init(&temp1, 14, 0);
+  fpoint_mult(&ratio1, &working, &temp1);
+  struct fpoint temp2;
+  fpoint_init(&temp2, 14, 0);
+  fpoint_mult_int(&ratio2, list_size(&ready_list), &temp2);
+  fpoint_add(&temp1, &temp2, &working);
+  fpoint_mult_int(&working,100,&working);
+  int ret = fpoint_to_int_nearest(&working);
+  return ret;
 }
 
 /* Returns 100 times the current thread's recent_cpu value. */
@@ -497,6 +514,10 @@ calc_priority (struct thread *t, void *aux)
 
 bool get_mlfq() {
   return thread_mlfqs;
+}
+
+void set_load_avg(int n) {
+  load_avg = n;
 }
 
 /* Idle thread.  Executes when no other thread is ready to run.

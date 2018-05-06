@@ -148,6 +148,7 @@ int thread_get_load_avg (void);
 int calc_priority (struct thread *t, void *aux);
 int calc_recent_cpu (struct thread *t, void *aux);
 bool get_mlfq();
+void set_load_avg(int);
 
 static bool priority_sort (const struct list_elem *a_, const struct list_elem *b_, void *aux UNUSED); //added
 //static bool thread_get_lock (void);                                                                   //added
