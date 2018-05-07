@@ -1,4 +1,5 @@
 //#include "threads/synch.h"
+#include <stdlib>
 #include "threads/thread.h"
 #include <debug.h>
 #include <stddef.h>
@@ -383,7 +384,6 @@ set_priority (int new_priority, struct thread *thread)
   thread->priority = new_priority;
   list_sort(&ready_list, priority_sort, NULL);
   intr_set_level (old_level);
-
 }
 
 /* Returns the current thread's priority. */
