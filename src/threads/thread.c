@@ -623,8 +623,7 @@ priority_donate(struct lock *lock){
       ASSERT(holder->donated_to == true);
       
       holder->priority = cur->priority; //donate
-      printf("donated_to holder now is %d\n", holder->donated_to);
-       printf("donated_to cur now is %d\n", cur->donated_to);
+     
       lock_acquire_int(lock);
        printf("donated_to holder now is %d\n", holder->donated_to);
        printf("donated_to cur now is %d\n", cur->donated_to);
@@ -633,7 +632,6 @@ priority_donate(struct lock *lock){
 
       //lock_try_acquire(lock);
       
-
       list_sort(&ready_list, priority_sort, NULL);
       thread_yield();
       //lock_try_acquire(lock);
