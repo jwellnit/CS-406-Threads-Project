@@ -588,7 +588,8 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 /*
 	This method is used to determine if a thread was able to aquire a lock.
 	It will return true if the thread gets the lock and false if it cannot aquire lock.
-	This method uses the helper method priority_donate.  Mostly needs to be changed
+	This method uses the helper method 
+	.  Mostly needs to be changed
 */
 void
 priority_donate(struct lock *lock){
@@ -625,6 +626,7 @@ priority_donate(struct lock *lock){
       lock_acquire_int(lock);
        printf("donated_to holder now is %d\n", holder->donated_to);
        printf("donated_to cur now is %d\n", cur->donated_to);
+       holder->donated_to = true;
       intr_set_level (old_level);
       //lock_acquire_int(lock);
 
