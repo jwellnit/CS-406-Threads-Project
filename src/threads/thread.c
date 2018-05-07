@@ -688,74 +688,48 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 */
 void
 priority_donate(struct lock *lock){
-
-  // enum intr_level old_level;
-  // old_level = intr_disable ();
-
-  struct thread *cur = thread_current(); //set a current thread
-
- 	//dont need to donate; return success
+	
+	struct thread *cur = thread_current(); //set a current thread
 
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
-    //  priority_return(); does not work here
 
-      return;
-	  // lock_acquire_int(lock);
-	}
-  else{
+      		return;
+	}else{
 		//disable interrupts here
 		struct thread *holder = lock->holder;
-    //list_push_back (&lock_list, &holder->lock_elem);
 
 		if(holder->priority < cur->priority){
 
-      enum intr_level old_level;
-      old_level = intr_disable ();
+      			enum intr_level old_level;
+      			old_level = intr_disable ();
 
-      holder->donated_to = true;
-      ASSERT(holder->donated_to == true);
+      			holder->donated_to = true;
+     			ASSERT(holder->donated_to == true);
 
-      holder->priority = cur->priority; //donate
-      lock_acquire_int(lock);
-      intr_set_level (old_level);
-      //lock_acquire_int(lock);
+      			holder->priority = cur->priority; //donate
+     			lock_acquire_int(lock);
+      			intr_set_level (old_level);
 
-      //lock_try_acquire(lock);
+      			list_sort(&ready_list, priority_sort, NULL);
+      			thread_yield();
 
-
-      list_sort(&ready_list, priority_sort, NULL);
-      thread_yield();
-      //lock_try_acquire(lock);
-
-      //lock_acquire_int(lock);
 		}
-}
-  //  priority_return(); does not work here
-
+	}
 }//end of priority_donate
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
 void
 priority_return(void){
-	//set the priority to the old priority
-	//release lock
-	//return priority
-	//lock_release(lock);
-  //ASSERT(thread_current()->donated_to == true);
+	
   enum intr_level old_level;
   old_level = intr_disable ();
 
   struct thread *cur = thread_current(); //set a current thread
 
-  //printf("lower value =  \n");
-//  printf("this is lower %d\n", thread_current()->lower );
-  //
-  //ASSERT(thread_current()->lower != -1);
   if(thread_current()->lower != -1){
       thread_current()->priority = thread_current()->lower;
       thread_current()->lower = -1;
-  }
-  else{
+  }else{
     cur->priority = cur->old_priority;
   }
 
@@ -811,8 +785,7 @@ thread_schedule_tail (struct thread *prev)
      pull out the rug under itself.  (We don't free
      initial_thread because its memory was not obtained via
      palloc().) */
-  if (prev != NULL && prev->status == THREAD_DYING && prev != initial_thread)
-    {
+  if (prev != NULL && prev->status == THREAD_DYING && prev != initial_thread){
       ASSERT (prev != cur);
       palloc_free_page (prev);
     }
@@ -838,6 +811,7 @@ schedule (void)
 
   if (cur != next)
     prev = switch_threads (cur, next);
+	
   thread_schedule_tail (prev);
 }
 
@@ -859,9 +833,6 @@ allocate_tid (void)
    Used by switch.S, which can't figure it out on its own. */
 uint32_t thread_stack_ofs = offsetof (struct thread, stack);
 
-
-
-////////////////////////////////////////////////////////////////////////////////////
 //sinple exponentiation on integer numbers
 int expi (int base, int exp) {
   if (exp == 0) {
@@ -880,6 +851,7 @@ bool fpoint_init (struct fpoint *x, int q, int n) {
   if (q > 30 || n > expi(2, 31-q)-1 || n < -1*expi(2, 31-q)) {
     return false;
   }
+	
   x->q = q;
   x->f = expi(2, q);
   x->v = n*x->f;
@@ -888,9 +860,11 @@ bool fpoint_init (struct fpoint *x, int q, int n) {
 
 //converts an int n to a fpoint. fpoint must be initialized first
 bool int_to_fpoint(struct fpoint *x, int n) {
+	
   if (n > expi(2, 31-x->q)-1 || n < -1*expi(2, 31-x->q)) {
     return false;
   }
+	
   x->v = n*x->f;
   return true;
 }
@@ -911,9 +885,11 @@ int fpoint_to_int_nearest (struct fpoint *x) {
 
 //add two fpoints x and y
 bool fpoint_add (struct fpoint *x, struct fpoint *y, struct fpoint *res) {
+	
   if (x->q != y->q || x->q != res->q) {
     return false;
   }
+	
   res->v = x->v + y->v;
   return true;
 }
