@@ -386,7 +386,7 @@ thread_set_priority (int new_priority)
   //priority donate multiple
   struct alarm         *al = malloc (sizeof(struct alarm));
   struct priority_elem *x  = malloc (sizeof(struct list_elem));
-  x.old_priority = new_priority;
+  x->old_priority = new_priority;
   list_push_back(&old_priority_list, &x.elem); 
 	
   list_sort(&ready_list, priority_sort, NULL);
@@ -535,8 +535,8 @@ init_thread (struct thread *t, const char *name, int priority)
   
   t->old_priority = priority;
 	
-  struct priority_elem x = malloc(sizeof(list_elem));
-  x.old_priority = priority;
+  struct priority_elem *x = malloc(sizeof(struct list_elem));
+  x->old_priority = priority;
   list_push_back(&old_priority_list, &x.elem); //priority donate multiple
 	
   t->priority = priority;
