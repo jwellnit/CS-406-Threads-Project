@@ -602,7 +602,7 @@ priority_donate(struct lock *lock){
 
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
     //  priority_return(); does not work here
-
+        printf("Print Here 1. priority now is %d\n", thread_get_priority());
       return;
 	  // lock_acquire_int(lock);
 	}
@@ -618,7 +618,7 @@ priority_donate(struct lock *lock){
 
       holder->donated_to = true;
       ASSERT(holder->donated_to == true);
-      printf("priority now is %d\n", thread_get_priority());
+      printf("Print Here 3. priority now is %d\n", thread_get_priority());
       holder->priority = cur->priority; //donate
       lock_acquire_int(lock);
       intr_set_level (old_level);
@@ -632,6 +632,8 @@ priority_donate(struct lock *lock){
       //lock_try_acquire(lock);
 
       //lock_acquire_int(lock);
+		}else{
+		printf("Print Here 2. priority now is %d\n", thread_get_priority());
 		}
 }
   //  priority_return(); does not work here
