@@ -367,33 +367,8 @@ thread_set_priority (int new_priority)
         if(thread_current()->priority < new_priority){
             thread_current()->priority = new_priority;
 	}
-//        printf("priority cur now in lowering is %d\n", thread_current()->priority);
-//   }else{
-       
-//         thread_current ()->old_priority = new_priority;
-//   	thread_current ()->priority = new_priority;
-//   	list_sort(&ready_list, priority_sort, NULL);
-//         printf("priority curcur now in lowering is %d\n", thread_current()->priority);
-//   }
-   //check if a thread is locked
-//   if(thread_current()->donated_to == true){
-//         thread_current()->lower = new_priority;
-
-//        printf("priority cur now in lowering is %d\n", thread_current()->priority);
-//        printf("this is lower %d\n", thread_current()->lower );
-     //}
-     // else{
- 	   //   thread_current ()->old_priority = thread_current ()->priority;
-  	 //   thread_current ()->priority = new_priority;
-	   //   list_sort(&ready_list, priority_sort, NULL);
-     //  }
- // }
-//   else{
-//       printf("old priority curcur now in lowering is %d\n", thread_current()->old_priority);
-//       thread_current ()->old_priority = thread_current ()->priority;
-//       thread_current ()->priority = new_priority;
        list_sort(&ready_list, priority_sort, NULL);
-//   }
+
   thread_yield();
   intr_set_level (old_level);
 
@@ -621,25 +596,19 @@ priority_donate(struct lock *lock){
       old_level = intr_disable ();
 
       holder->donated_to = true;
-      cur->donated_to = false;
       ASSERT(holder->donated_to == true);
       
       holder->priority = cur->priority; //donate
      
       lock_acquire_int(lock);
+      printf("priority cur now is %d\n", cur->priority);
        printf("donated_to holder now is %d\n", holder->donated_to);
        printf("donated_to cur now is %d\n", cur->donated_to);
       intr_set_level (old_level);
-     //  lock_acquire_int(lock);
-
-      //lock_try_acquire(lock);
       
       list_sort(&ready_list, priority_sort, NULL);
       thread_yield();
-      //lock_try_acquire(lock);
-
-      //lock_acquire_int(lock);
-		}
+   }
 }
   //  priority_return(); does not work here
 
