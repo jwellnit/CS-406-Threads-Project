@@ -86,19 +86,31 @@ typedef int tid_t;
    blocked state is on a semaphore wait list. */
 struct thread
   {
+      /* Owned by thread.c. */
+    unsigned magic;                     /* Detects stack overflow. */
+
     /* Owned by thread.c. */
     tid_t tid;                          /* Thread identifier. */
+  
     enum thread_status status;          /* Thread state. */
+  
     char name[16];                      /* Name (for debugging purposes). */
+  
     uint8_t *stack;                     /* Saved stack pointer. */
+  
     int priority;                       /* Priority. */
-    int old_priority;
+    int old_priority;                   /* A thread's last priority before donation */
     int lower;
-    bool donated_to;               /*save old priority for priority donation*/
+    int nice;                           /* For MLFQ */
+    int recent_cpu;
+  
+    bool donated_to;                    /*save old priority for priority donation*/
+  
+   
     struct list_elem allelem;           /* List element for all threads list. */
 
     /* Shared between thread.c and synch.c. */
-    struct list_elem elem;              /* List element. */
+    struct list_elem elem;                   /* List element. */
 
     struct list_elem lock_elem;              /* List lock_element. */
 
@@ -106,11 +118,6 @@ struct thread
     /* Owned by userprog/process.c. */
     uint32_t *pagedir;                  /* Page directory. */
 #endif
-
-    /* Owned by thread.c. */
-    unsigned magic;                     /* Detects stack overflow. */
-    int nice;
-    int recent_cpu;
   };
 
 /* If false (default), use round-robin scheduler.
@@ -159,15 +166,8 @@ static bool priority_sort (const struct list_elem *a_, const struct list_elem *b
 void priority_donate(struct lock *lock); //added
 void priority_return(void); //added
 int get_lower(void);
-//void set_priority (int new_priority, struct thread *thread); //UNUSED
-//bool check_lock_list(struct thread *); //UNUSED
-//bool lock_list_remove(struct thread *); //UNUSED
 
-
-
-
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/* This is fixed point arithmetic */
 struct fpoint {
   int q;
   int f;
