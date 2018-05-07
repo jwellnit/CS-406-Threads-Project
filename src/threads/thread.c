@@ -617,6 +617,7 @@ priority_donate(struct lock *lock){
       old_level = intr_disable ();
 
       holder->donated_to = true;
+      cur->donated_to = false;
       ASSERT(holder->donated_to == true);
       printf("priority holder now is %d\n", holder->priority);
        printf("priority cur now is %d\n", cur->priority);
