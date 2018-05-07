@@ -1,5 +1,5 @@
 //#include "threads/synch.h"
-#include <malloc.h>
+#include <stdlib.h>
 #include "threads/thread.h"
 #include <debug.h>
 #include <stddef.h>
