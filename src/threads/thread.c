@@ -634,7 +634,7 @@ priority_donate(struct lock *lock){
 
       list_sort(&ready_list, priority_sort, NULL);
       thread_yield();
-      holder->donated_to = true;
+      cur->donated_to = true;
       //lock_try_acquire(lock);
 
       //lock_acquire_int(lock);
