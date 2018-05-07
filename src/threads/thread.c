@@ -1,5 +1,5 @@
 //#include "threads/synch.h"
-#include <stdlib.h>
+#include <malloc.h>
 #include "threads/thread.h"
 #include <debug.h>
 #include <stddef.h>
@@ -384,7 +384,8 @@ thread_set_priority (int new_priority)
    thread_current ()->priority = new_priority;
 
   //priority donate multiple
-  struct priority_elem x = malloc(sizeof(list_elem));
+  struct alarm         *al = malloc (sizeof(struct alarm));
+  struct priority_elem *x  = malloc (sizeof(struct list_elem));
   x.old_priority = new_priority;
   list_push_back(&old_priority_list, &x.elem); 
 	
