@@ -599,9 +599,11 @@ priority_donate(struct lock *lock){
       ASSERT(holder->donated_to == true);
       
       holder->priority = cur->priority; //donate
-     
+       printf("priority cur now is %d\n", cur->priority);
+      printf("priority holder now is %d\n", holder->priority);
       lock_acquire_int(lock);
       printf("priority cur now is %d\n", cur->priority);
+      printf("priority holder now is %d\n", holder->priority);
        printf("donated_to holder now is %d\n", holder->donated_to);
        printf("donated_to cur now is %d\n", cur->donated_to);
       intr_set_level (old_level);
