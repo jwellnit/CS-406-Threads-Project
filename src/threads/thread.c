@@ -417,6 +417,8 @@ thread_set_priority (int new_priority)
 int
 thread_get_priority (void)
 {
+  printf("current thread's old priority is %d\n", thread_current()->old_priority);
+  printf("current thread's lower is %d\n", thread_current()->lower);
   return thread_current ()->priority;
 }
 
@@ -634,7 +636,6 @@ priority_donate(struct lock *lock){
 
       list_sort(&ready_list, priority_sort, NULL);
       thread_yield();
-      cur->donated_to = true;
       //lock_try_acquire(lock);
 
       //lock_acquire_int(lock);
