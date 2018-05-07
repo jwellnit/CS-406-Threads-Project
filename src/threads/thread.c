@@ -618,14 +618,14 @@ priority_donate(struct lock *lock){
 
       holder->donated_to = true;
       ASSERT(holder->donated_to == true);
-
+      printf("priority now is %d\n", thread_get_priority());
       holder->priority = cur->priority; //donate
       lock_acquire_int(lock);
       intr_set_level (old_level);
       //lock_acquire_int(lock);
 
       //lock_try_acquire(lock);
-
+      
 
       list_sort(&ready_list, priority_sort, NULL);
       thread_yield();
