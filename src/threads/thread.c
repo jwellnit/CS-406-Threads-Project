@@ -71,7 +71,10 @@ static struct thread *running_thread (void);
 static struct thread *next_thread_to_run (void);
 static void init_thread (struct thread *, const char *name, int priority);
 static bool is_thread (struct thread *) UNUSED;
-static void *alloc_frame (struct thread *, size_t size);
+static voi
+
+
+d *alloc_frame (struct thread *, size_t size);
 static void schedule (void);
 void thread_schedule_tail (struct thread *prev);
 static tid_t allocate_tid (void);
@@ -362,9 +365,11 @@ thread_set_priority (int new_priority)
 
 //ASSERT(thread_current()->donated_to == true);
 //ASSERT(thread_current()->donated_to != true);
-//   if(thread_current()->priority > new_priority){
-//        thread_current()->lower = new_priority;
-//        thread_current ()->old_priority = new_priority;
+
+        thread_current ()->old_priority = new_priority;
+        if(thread_current()->priority < new_priority){
+            thread_current()->priority = new_priority;
+	}
 //        printf("priority cur now in lowering is %d\n", thread_current()->priority);
 //   }else{
        
@@ -374,11 +379,11 @@ thread_set_priority (int new_priority)
 //         printf("priority curcur now in lowering is %d\n", thread_current()->priority);
 //   }
    //check if a thread is locked
-  if(thread_current()->donated_to == true){
-        thread_current()->lower = new_priority;
+//   if(thread_current()->donated_to == true){
+//         thread_current()->lower = new_priority;
 
-       printf("priority cur now in lowering is %d\n", thread_current()->priority);
-        //printf("this is lower %d\n", thread_current()->lower );
+//        printf("priority cur now in lowering is %d\n", thread_current()->priority);
+//        printf("this is lower %d\n", thread_current()->lower );
      //}
      // else{
  	   //   thread_current ()->old_priority = thread_current ()->priority;
@@ -386,12 +391,12 @@ thread_set_priority (int new_priority)
 	   //   list_sort(&ready_list, priority_sort, NULL);
      //  }
   }
-  else{
-      printf("old priority curcur now in lowering is %d\n", thread_current()->old_priority);
-      thread_current ()->old_priority = thread_current ()->priority;
-      thread_current ()->priority = new_priority;
-      list_sort(&ready_list, priority_sort, NULL);
-  }
+//   else{
+//       printf("old priority curcur now in lowering is %d\n", thread_current()->old_priority);
+//       thread_current ()->old_priority = thread_current ()->priority;
+//       thread_current ()->priority = new_priority;
+       list_sort(&ready_list, priority_sort, NULL);
+//   }
   thread_yield();
   intr_set_level (old_level);
 
@@ -660,13 +665,13 @@ priority_return(void){
 //  printf("this is lower %d\n", thread_current()->lower );
   //
   //ASSERT(thread_current()->lower != -1);
-  if(thread_current()->lower != -1){
-      thread_current()->priority = thread_current()->lower;
-      thread_current()->lower = -1;
-  }
-  else{
+//   if(thread_current()->lower != -1){
+//       thread_current()->priority = thread_current()->lower;
+//       thread_current()->lower = -1;
+//   }
+//   else{
     cur->priority = cur->old_priority;
-  }
+ // }
 
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
