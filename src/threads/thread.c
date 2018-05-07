@@ -390,7 +390,7 @@ thread_set_priority (int new_priority)
   	 //   thread_current ()->priority = new_priority;
 	   //   list_sort(&ready_list, priority_sort, NULL);
      //  }
-  }
+ // }
 //   else{
 //       printf("old priority curcur now in lowering is %d\n", thread_current()->old_priority);
 //       thread_current ()->old_priority = thread_current ()->priority;
