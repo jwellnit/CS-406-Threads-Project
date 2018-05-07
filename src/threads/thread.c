@@ -375,6 +375,7 @@ thread_set_priority (int new_priority)
 
         thread_current()->lower = new_priority;
 
+       printf("priority cur now in lowering is %d\n", thread_current()->priority);
         //printf("this is lower %d\n", thread_current()->lower );
 
 
@@ -602,7 +603,6 @@ priority_donate(struct lock *lock){
 
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
     //  priority_return(); does not work here
-        printf("priority a now is %d\n", thread_get_priority());
       return;
 	  // lock_acquire_int(lock);
 	}
@@ -618,7 +618,8 @@ priority_donate(struct lock *lock){
 
       holder->donated_to = true;
       ASSERT(holder->donated_to == true);
-      printf("priority b now is %d\n", holder->priority);
+      printf("priority holder now is %d\n", holder->priority);
+       printf("priority cur now is %d\n", cur->priority);
       holder->priority = cur->priority; //donate
       lock_acquire_int(lock);
       intr_set_level (old_level);
@@ -632,8 +633,6 @@ priority_donate(struct lock *lock){
       //lock_try_acquire(lock);
 
       //lock_acquire_int(lock);
-		}else{
-		printf("priority c now is %d\n", holder->priority);
 		}
 }
   //  priority_return(); does not work here
