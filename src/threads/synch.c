@@ -248,7 +248,7 @@ lock_acquire_int (struct lock *lock)
   //ASSERT (lock->holder == NULL);
 enum intr_level old_level;
 old_level = intr_disable ();
-printf("donated_to holder before sema now is %d\n", lock->holder->donated_to);
+//printf("donated_to holder before sema now is %d\n", lock->holder->donated_to);
 //printf("donated_to cur before sema now is %d\n", thread_current()->donated_to);
 sema_down (&lock->semaphore);
 lock->holder = thread_current ();
