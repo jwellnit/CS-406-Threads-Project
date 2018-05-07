@@ -252,9 +252,9 @@ printf("donated_to holder before sema now is %d\n", lock->holder->donated_to);
 //printf("donated_to cur before sema now is %d\n", thread_current()->donated_to);
 sema_down (&lock->semaphore);
 lock->holder = thread_current ();
-printf("old priority holder after sema now is %d\n", lock->holder->old_priority);
+//printf("old priority holder after sema now is %d\n", lock->holder->old_priority);
 //printf("old priority cur after sema now is %d\n", thread_current()->old_priority);
-printf("donated_to holder after sema now is %d\n", lock->holder->donated_to);
+//printf("donated_to holder after sema now is %d\n", lock->holder->donated_to);
 //printf("donated_to cur after sema now is %d\n", thread_current()->donated_to);
 intr_set_level (old_level);
 }
