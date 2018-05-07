@@ -224,14 +224,23 @@ lock_acquire (struct lock *lock)
   ASSERT (!lock_held_by_current_thread (lock));
 
   if (!thread_mlfqs) {
+    enum intr_level old_level;
+    old_level = intr_disable ();
+
     if(lock->holder == NULL){
-      lock_acquire_int(lock);
+  	lock_acquire_int(lock);
     }else{
-      priority_donate(lock);
+      //enum intr_level old_level;
+      //old_level = intr_disable ();
+          priority_donate(lock);
+
+      //intr_set_level (old_level);
     }
+      intr_set_level (old_level);
   } else {
     lock_acquire_int(lock);
   }
+
 }
 
 //copy 2 lock aquire internal
@@ -241,7 +250,7 @@ lock_acquire_int (struct lock *lock)
   ASSERT (lock != NULL);
   ASSERT (!intr_context ());
   ASSERT (!lock_held_by_current_thread (lock));
-
+  //ASSERT (lock->holder == NULL);
 enum intr_level old_level;
 old_level = intr_disable ();
 sema_down (&lock->semaphore);
@@ -283,9 +292,23 @@ lock_release (struct lock *lock)
 {
   ASSERT (lock != NULL);
   ASSERT (lock_held_by_current_thread (lock));
+//  ASSERT(thread_current()->donated_to != true);
+  //ASSERT(thread_current()->lower != -1);
+  enum intr_level old_level;
+  old_level = intr_disable ();
 
   lock->holder = NULL;
   sema_up (&lock->semaphore);
+
+
+  if(thread_current() ->donated_to == true){
+
+    //ASSERT(thread_current()->donated_to == true);
+
+    //printf("donated_to = %s\n" /*,thread_current()->lower*/);
+    priority_return();
+  }
+intr_set_level (old_level);
 }
 
 /* Returns true if the current thread holds LOCK, false

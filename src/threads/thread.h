@@ -92,11 +92,15 @@ struct thread
     char name[16];                      /* Name (for debugging purposes). */
     uint8_t *stack;                     /* Saved stack pointer. */
     int priority;                       /* Priority. */
-  int old_priority;                     /*save old priority for priority donation*/
+    int old_priority;
+    int lower;
+    bool donated_to;               /*save old priority for priority donation*/
     struct list_elem allelem;           /* List element for all threads list. */
 
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
+
+    struct list_elem lock_elem;              /* List lock_element. */
 
 #ifdef USERPROG
     /* Owned by userprog/process.c. */
@@ -153,8 +157,11 @@ void set_load_avg(int);
 static bool priority_sort (const struct list_elem *a_, const struct list_elem *b_, void *aux UNUSED); //added
 //static bool thread_get_lock (void);                                                                   //added
 void priority_donate(struct lock *lock); //added
-void priority_return(struct lock *lock); //added
-void set_priority (int new_priority, struct thread *thread);
+void priority_return(void); //added
+int get_lower(void);
+//void set_priority (int new_priority, struct thread *thread); //UNUSED
+//bool check_lock_list(struct thread *); //UNUSED
+//bool lock_list_remove(struct thread *); //UNUSED
 
 
 

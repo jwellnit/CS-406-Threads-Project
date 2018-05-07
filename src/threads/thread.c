@@ -28,7 +28,8 @@ static struct list ready_list;
 /* List of all processes.  Processes are added to this list
    when they are first scheduled and removed when they exit. */
 static struct list all_list;
-/* lock list */
+
+/* List of all threads that have locks that cause conflict */
 static struct list lock_list;
 
 /* Idle thread. */
@@ -223,6 +224,7 @@ thread_create (const char *name, int priority,
   sf->eip = switch_entry;
   sf->ebp = 0;
 
+  t->donated_to = false;
   intr_set_level (old_level);
   /* add lock to lock_list if one is given */
 // 	if(is_lock(aux)){
@@ -375,13 +377,37 @@ void
 thread_set_priority (int new_priority)
 {
   if (!thread_mlfqs) {
-    enum intr_level old_level;
-    old_level = intr_disable ();
-    //thread_current ()->old_priority = thread_current ()->priority;
-    thread_current ()->priority = new_priority;
-    list_sort(&ready_list, priority_sort, NULL);
-    thread_yield();
-    intr_set_level (old_level);
+  enum intr_level old_level;
+  old_level = intr_disable ();
+
+//ASSERT(thread_current()->donated_to == true);
+//ASSERT(thread_current()->donated_to != true);
+
+   //check if a thread is locked
+  if(thread_current()->donated_to == true){
+     //if(thread_current()->priority > new_priority){
+
+        thread_current()->lower = new_priority;
+
+        //printf("this is lower %d\n", thread_current()->lower );
+
+
+
+     //}
+     // else{
+ 	   //   thread_current ()->old_priority = thread_current ()->priority;
+  	 //   thread_current ()->priority = new_priority;
+	   //   list_sort(&ready_list, priority_sort, NULL);
+     //  }
+  }
+  else{
+
+    thread_current ()->old_priority = thread_current ()->priority;
+  	thread_current ()->priority = new_priority;
+  	list_sort(&ready_list, priority_sort, NULL);
+  }
+  thread_yield();
+  intr_set_level (old_level);
   } else {
     return;
   }
@@ -392,20 +418,17 @@ thread_set_priority (int new_priority)
  * This method was changed to use a lock when setting the priority of a thread.
  * It also uses thread_yield ()
 */
-void
-set_priority (int new_priority, struct thread *thread)
-{
-  if (!thread_mlfqs) {
-    enum intr_level old_level;
-    old_level = intr_disable ();
-    thread->old_priority = new_priority;
-    thread->priority = new_priority;
-    list_sort(&ready_list, priority_sort, NULL);
-    intr_set_level (old_level);
-  } else {
-    return;
-  }
-}
+// void
+// set_priority (int new_priority, struct thread *thread)
+// {
+//   enum intr_level old_level;
+//   old_level = intr_disable ();
+//   thread->old_priority = new_priority;
+//   thread->priority = new_priority;
+//   list_sort(&ready_list, priority_sort, NULL);
+//   intr_set_level (old_level);
+//
+// }
 
 /* Returns the current thread's priority. */
 int
@@ -604,8 +627,9 @@ init_thread (struct thread *t, const char *name, int priority)
   strlcpy (t->name, name, sizeof t->name);
   t->stack = (uint8_t *) t + PGSIZE;
   if (!thread_mlfqs) {
-    t->old_priority = priority;
-    t->priority = priority;
+  t->old_priority = priority;
+  t->priority = priority;
+  t->lower = -1;
   } else {
     t->priority = calc_priority(t, NULL);
   }
@@ -665,41 +689,87 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 void
 priority_donate(struct lock *lock){
 
-        struct thread *cur = thread_current(); //set a current thread
+  // enum intr_level old_level;
+  // old_level = intr_disable ();
 
+  struct thread *cur = thread_current(); //set a current thread
 
-	// if(lock_held_by_current_thread(lock)/*lock_try_acquire(lock)*/){ //current thread tries to acquire the lock
-	// 		return;
-	// 	//dont need to donate; return success
+ 	//dont need to donate; return success
 
-	//lock_try_acquire(lock)
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
-	  	return;
+    //  priority_return(); does not work here
+
+      return;
 	  // lock_acquire_int(lock);
-	}else{
+	}
+  else{
 		//disable interrupts here
 		struct thread *holder = lock->holder;
-
-		// if(holder == 0) //check holder not 0
-		// 	lock_acquire_int(lock);
-		// 	//exit;
+    //list_push_back (&lock_list, &holder->lock_elem);
 
 		if(holder->priority < cur->priority){
-			holder->priority = cur->priority; //donate
-			lock_acquire_int(lock);
+
+      enum intr_level old_level;
+      old_level = intr_disable ();
+
+      holder->donated_to = true;
+      ASSERT(holder->donated_to == true);
+
+      holder->priority = cur->priority; //donate
+      lock_acquire_int(lock);
+      intr_set_level (old_level);
+      //lock_acquire_int(lock);
+
+      //lock_try_acquire(lock);
+
+
+      list_sort(&ready_list, priority_sort, NULL);
+      thread_yield();
+      //lock_try_acquire(lock);
+
+      //lock_acquire_int(lock);
 		}
-		}
+}
+  //  priority_return(); does not work here
+
 }//end of priority_donate
 
 /* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
 void
-priority_return(struct lock *lock){
+priority_return(void){
 	//set the priority to the old priority
 	//release lock
 	//return priority
-	lock_release(lock);
-	struct thread *cur = thread_current(); //set a current thread
-	cur->priority = cur->old_priority;
+	//lock_release(lock);
+  //ASSERT(thread_current()->donated_to == true);
+  enum intr_level old_level;
+  old_level = intr_disable ();
+
+  struct thread *cur = thread_current(); //set a current thread
+
+  //printf("lower value =  \n");
+//  printf("this is lower %d\n", thread_current()->lower );
+  //
+  //ASSERT(thread_current()->lower != -1);
+  if(thread_current()->lower != -1){
+      thread_current()->priority = thread_current()->lower;
+      thread_current()->lower = -1;
+  }
+  else{
+    cur->priority = cur->old_priority;
+  }
+
+  list_sort(&ready_list, priority_sort, NULL);
+  thread_yield();
+
+  cur->donated_to = false;
+
+   intr_set_level (old_level);
+
+}//end priority_return
+
+int get_lower(void){
+  return thread_current ()->lower;
 }
 
 /* Completes a thread switch by activating the new thread's page
