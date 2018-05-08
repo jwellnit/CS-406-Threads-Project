@@ -218,17 +218,11 @@ thread_create (const char *name, int priority,
 
   t->donated_to = false;
   intr_set_level (old_level);
-  /* add lock to lock_list if one is given */
-// 	if(is_lock(aux)){
-//           list_push_front(&lock_list, &aux->elem);
-// 	}//end if
+  
   /* Add to run queue. */
   thread_unblock (t);
 
   thread_yield(); //added this
-// 	if(aux != NULL){
-// 	x_donate(aux);
-// 	}
 
   return tid;
 }
@@ -425,7 +419,7 @@ thread_get_recent_cpu (void)
   /* Not yet implemented. */
   return 0;
 }
-
+
 /* Idle thread.  Executes when no other thread is ready to run.
 
    The idle thread is initially put on the ready list by
@@ -474,7 +468,7 @@ kernel_thread (thread_func *function, void *aux)
   function (aux);       /* Execute the thread function. */
   thread_exit ();       /* If function() returns, kill the thread. */
 }
-
+
 /* Returns the running thread. */
 struct thread *
 running_thread (void)
@@ -542,11 +536,12 @@ alloc_frame (struct thread *t, size_t size)
 static struct thread *
 next_thread_to_run (void)
 {
-  	if (list_empty (&ready_list))
+  	if (list_empty (&ready_list)){
     		return idle_thread;
-  	else
+	}else{
 	    	list_sort(&ready_list, priority_sort, NULL);
-    	return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front
+    		return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front	
+	}
 }
 
 /*
