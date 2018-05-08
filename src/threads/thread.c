@@ -601,7 +601,7 @@ priority_return(void){
 	struct thread *cur = thread_current(); //set a current thread
 	
 	cur->priority = cur->old_priority;
-	cur->priority = list_pop_back(&pri_lock_list)->holder->priority;// pop the old priority for pd multiple
+	//cur->priority = list_pop_back(&pri_lock_list)->holder->priority;// pop the old priority for pd multiple
 	
   	cur->donated_to = false;
 }
