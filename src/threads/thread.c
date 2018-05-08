@@ -388,17 +388,6 @@ thread_set_priority (int new_priority)
      //if(thread_current()->priority > new_priority){
 
         thread_current()->lower = new_priority;
-
-        //printf("this is lower %d\n", thread_current()->lower );
-
-
-
-     //}
-     // else{
- 	   //   thread_current ()->old_priority = thread_current ()->priority;
-  	 //   thread_current ()->priority = new_priority;
-	   //   list_sort(&ready_list, priority_sort, NULL);
-     //  }
   }
   else{
 
@@ -418,17 +407,6 @@ thread_set_priority (int new_priority)
  * This method was changed to use a lock when setting the priority of a thread.
  * It also uses thread_yield ()
 */
-// void
-// set_priority (int new_priority, struct thread *thread)
-// {
-//   enum intr_level old_level;
-//   old_level = intr_disable ();
-//   thread->old_priority = new_priority;
-//   thread->priority = new_priority;
-//   list_sort(&ready_list, priority_sort, NULL);
-//   intr_set_level (old_level);
-//
-// }
 
 /* Returns the current thread's priority. */
 int
