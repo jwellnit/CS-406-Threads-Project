@@ -96,7 +96,6 @@ struct thread
 
     /* Shared between thread.c and synch.c. */
     struct list_elem elem;              /* List element. */
-
     struct list_elem lock_elem;              /* List lock_element. */
 
 #ifdef USERPROG
@@ -144,10 +143,8 @@ void thread_set_nice (int);
 int thread_get_recent_cpu (void);
 int thread_get_load_avg (void);
 static bool priority_sort (const struct list_elem *a_, const struct list_elem *b_, void *aux UNUSED); //added
-//static bool thread_get_lock (void);                                                                   //added
 void priority_donate(struct lock *lock); //added
 void priority_return(void); //added
-//void set_priority (int new_priority, struct thread *thread); //UNUSED
 bool check_lock_list(struct thread *);
 bool lock_list_remove(struct thread *);
 
