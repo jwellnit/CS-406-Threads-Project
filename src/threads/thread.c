@@ -33,7 +33,7 @@ static struct list all_list;
 /* List of all threads that have locks that cause conflict */
 static struct list lock_list;
 
-static struct list old_priority_list;           /*list for priority donate multiple*/
+static struct list pri_lock_list;           /*list for priority donate multiple*/
 
 /* Idle thread. */
 static struct thread *idle_thread;
@@ -102,7 +102,7 @@ thread_init (void)
   list_init (&ready_list);
   list_init (&all_list);
   list_init (&lock_list);
-  list_init (&old_priority_list);
+  list_init (&pri_lock_list);
 
   /* Set up a thread structure for the running thread. */
   initial_thread = running_thread ();
@@ -227,7 +227,7 @@ thread_create (const char *name, int priority,
 
   thread_yield(); //added this
 // 	if(aux != NULL){
-// 	priority_donate(aux);
+// 	x_donate(aux);
 // 	}
 
   return tid;
@@ -368,37 +368,25 @@ thread_foreach (thread_action_func *func, void *aux)
 void
 thread_set_priority (int new_priority)
 {
-  enum intr_level old_level;
-  old_level = intr_disable ();
-  //int temp = thread_current ()->priority;
- 
-  //thread tries to switch its priority	
-  //thread_current ()->old_priority = temp;
-   thread_current ()->priority = new_priority;
-
-  //priority donate multiple
+	enum intr_level old_level;
+	old_level = intr_disable ();
 	
-  list_sort(&ready_list, priority_sort, NULL);
-  thread_yield();
-  intr_set_level (old_level);
+	struct *cur = thread_current();
+	cur->priority = new_priority;
 
+	//priority donate multiple
+	
+	list_sort(&pri_lock_list, priority_sort, NULL);
+	
+	list_sort(&ready_list, priority_sort, NULL);
+	thread_yield();
+	intr_set_level (old_level);
 }
 
 /* Sets the given thread's priority to NEW_PRIORITY.
  * This method was changed to use a lock when setting the priority of a thread.
  * It also uses thread_yield ()
 */
-// void
-// set_priority (int new_priority, struct thread *thread)
-// {
-//   enum intr_level old_level;
-//   old_level = intr_disable ();
-//   thread->old_priority = new_priority;
-//   thread->priority = new_priority;
-//   list_sort(&ready_list, priority_sort, NULL);
-//   intr_set_level (old_level);
-//
-// }
 
 /* Returns the current thread's priority. */
 int
@@ -538,12 +526,12 @@ init_thread (struct thread *t, const char *name, int priority)
 static void *
 alloc_frame (struct thread *t, size_t size)
 {
-  /* Stack data is always allocated in word-size units. */
-  ASSERT (is_thread (t));
-  ASSERT (size % sizeof (uint32_t) == 0);
+	  /* Stack data is always allocated in word-size units. */
+	  ASSERT (is_thread (t));
+	  ASSERT (size % sizeof (uint32_t) == 0);
 
-  t->stack -= size;
-  return t->stack;
+	  t->stack -= size;
+	  return t->stack;
 }
 
 /* Chooses and returns the next thread to be scheduled.  Should
@@ -554,11 +542,11 @@ alloc_frame (struct thread *t, size_t size)
 static struct thread *
 next_thread_to_run (void)
 {
-  if (list_empty (&ready_list))
-    return idle_thread;
-  else
-    list_sort(&ready_list, priority_sort, NULL);
-    return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front
+  	if (list_empty (&ready_list))
+    		return idle_thread;
+  	else
+	    	list_sort(&ready_list, priority_sort, NULL);
+    	return list_entry (list_pop_front (&ready_list), struct thread, elem); //switched it back to pop_front
 }
 
 /*
@@ -566,15 +554,14 @@ This is a helper method need by the list_sort method found within the lib/kernel
 The method looks at two different threads and returns true is the priority of thread a is less then
 the priority of thread b.  Otherwise the method will return false.
 */
-
 static bool
 priority_sort (const struct list_elem *a_, const struct list_elem *b_,
             void *aux UNUSED)
 {
-  const struct thread *a = list_entry (a_, struct thread, elem);
-  const struct thread *b = list_entry (b_, struct thread, elem);
+  	const struct thread *a = list_entry (a_, struct thread, elem);
+  	const struct thread *b = list_entry (b_, struct thread, elem);
 
-  return a->priority > b->priority;
+  	return a->priority > b->priority;
 }//end of priority_sort
 
 /*
@@ -587,51 +574,41 @@ priority_donate(struct lock *lock){
 
   struct thread *cur = thread_current(); //set a current thread
 
-
-	// if(lock_held_by_current_thread(lock)/*lock_try_acquire(lock)*/){ //current thread tries to acquire the lock
-	// 		return;
-	// 	//dont need to donate; return success
-
-
-
-
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
-    //  priority_return(); does not work here
-      return;
-	  // lock_acquire_int(lock);
+      		return;
 	}else{
 		//disable interrupts here
-    enum intr_level old_level;
-    old_level = intr_disable ();
+    		enum intr_level old_level;
+    		old_level = intr_disable ();
 		struct thread *holder = lock->holder;
-    holder->donated_to = true;
+    		holder->donated_to = true;
 
-    list_push_back (&lock_list, &holder->lock_elem);
+    		list_push_back (&lock_list, &holder->lock_elem);
 
-    intr_set_level (old_level);
+    		intr_set_level (old_level);
 
 
 		if(holder->priority < cur->priority){
-      enum intr_level old_level;
-      old_level = intr_disable ();
+      			enum intr_level old_level;
+      			old_level = intr_disable ();
 
-      holder->priority = cur->priority; //donate
+      			holder->priority = cur->priority; //donate
 			lock_acquire_int(lock);
 
-      intr_set_level (old_level);
+      			intr_set_level (old_level);
 		}
-		}
+	}
 }
 
 void
 priority_return(void){
 
 	struct thread *cur = thread_current(); //set a current thread
+	
 	cur->priority = cur->old_priority;
+	cur->priority = list_pop_back(&pri_lock_list)->holder->priority;// pop the old priority for pd multiple
 	
-        //cur->priority = list_pop_back(&old_priority_list);// pop the old priority for pd multiple
-	
-  cur->donated_to = false;
+  	cur->donated_to = false;
 }
 
 /* Completes a thread switch by activating the new thread's page
