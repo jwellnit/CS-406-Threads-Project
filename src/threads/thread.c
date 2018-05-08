@@ -507,6 +507,8 @@ init_thread (struct thread *t, const char *name, int priority)
   t->old_priority = priority;
   
   //priority donate multiple
+	//put a lock onto t's priority lock list
+  //list_push_back(&pri_lock_list, );
 	
   t->priority = priority;
 	
@@ -567,7 +569,7 @@ priority_sort (const struct list_elem *a_, const struct list_elem *b_,
 void
 priority_donate(struct lock *lock){
 
-  struct thread *cur = thread_current(); //set a current thread
+  	struct thread *cur = thread_current(); //set a current thread
 
 	if(lock_try_acquire(lock)){ //current thread tries to acquire the lock
       		return;
@@ -579,9 +581,9 @@ priority_donate(struct lock *lock){
     		holder->donated_to = true;
 
     		list_push_back (&lock_list, &holder->lock_elem);
+		list_push_back (&pri_lock_list, &holder->lock_elem);
 
     		intr_set_level (old_level);
-
 
 		if(holder->priority < cur->priority){
       			enum intr_level old_level;
@@ -600,8 +602,11 @@ priority_return(void){
 
 	struct thread *cur = thread_current(); //set a current thread
 	
-	cur->priority = cur->old_priority;
-	//cur->priority = list_pop_back(&pri_lock_list)->holder->priority;// pop the old priority for pd multiple
+	if(list_size_of(&pri_lock_list) == 0 ){
+		cur->priority = cur->old_priority;
+	}else{
+		cur->priority = list_pop_back(&pri_lock_list)->holder->priority;// pop the old priority for pd multiple
+	}
 	
   	cur->donated_to = false;
 }
