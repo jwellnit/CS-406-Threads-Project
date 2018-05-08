@@ -605,7 +605,7 @@ priority_return(void){
 	if(list_size_of(&pri_lock_list) == 0 ){
 		cur->priority = cur->old_priority;
 	}else{
-		cur->priority = list_pop_back(&pri_lock_list)->holder->priority;// pop the old priority for pd multiple
+		cur->priority = list_pop_back(&pri_lock_list)->priority;// pop the old priority for pd multiple
 	}
 	
   	cur->donated_to = false;
