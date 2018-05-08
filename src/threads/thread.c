@@ -11,7 +11,6 @@
 #include "threads/intr-stubs.h"
 #include "threads/palloc.h"
 #include "threads/switch.h"
-//#include "threads/synch.h"
 #include "threads/vaddr.h"
 #ifdef USERPROG
 #include "userprog/process.h"
@@ -53,12 +52,6 @@ struct kernel_thread_frame
     void *aux;                  /* Auxiliary data for function. */
   };
 
-// an element int to go into the old priority list 
-struct priority_elem
-  {
-    struct list_elem elem;              /* List element. */
-    int old_priority; //stores the the old priority
-  };
 
 /* Statistics. */
 static long long idle_ticks;    /* # of timer ticks spent idle. */
@@ -384,10 +377,6 @@ thread_set_priority (int new_priority)
    thread_current ()->priority = new_priority;
 
   //priority donate multiple
-  struct alarm         *al = malloc (sizeof(struct alarm));
-  struct priority_elem *x  = malloc (sizeof(struct list_elem));
-  x->old_priority = new_priority;
-  list_push_back(&old_priority_list, &x->elem); 
 	
   list_sort(&ready_list, priority_sort, NULL);
   thread_yield();
@@ -534,10 +523,8 @@ init_thread (struct thread *t, const char *name, int priority)
   t->stack = (uint8_t *) t + PGSIZE;
   
   t->old_priority = priority;
-	
-  struct priority_elem *x = malloc(sizeof(struct list_elem));
-  x->old_priority = priority;
-  list_push_back(&old_priority_list, &x->elem); //priority donate multiple
+  
+  //priority donate multiple
 	
   t->priority = priority;
 	
@@ -623,9 +610,6 @@ priority_donate(struct lock *lock){
 
     intr_set_level (old_level);
 
-		// if(holder == 0) //check holder not 0
-		// 	lock_acquire_int(lock);
-		// 	//exit;
 
 		if(holder->priority < cur->priority){
       enum intr_level old_level;
@@ -637,63 +621,11 @@ priority_donate(struct lock *lock){
       intr_set_level (old_level);
 		}
 		}
-  //  priority_return(); does not work here
-}//end of priority_donate
+}
 
-// bool check_lock_list(struct thread *temp){
-// //Declarations
-//   struct thread *cur_temp = temp;
-//   struct list_elem *e;
-//
-//   ASSERT (intr_get_level () == INTR_OFF);
-//
-//   if(list_empty(&lock_list)){
-//     return false;
-//   }
-//
-//   for (e = list_begin (&lock_list); e != list_end (&lock_list);
-//        e = list_next (e))
-//     {
-//       struct thread *t = list_entry (e, struct thread, lock_elem);
-//       if(cur_temp->tid == t->tid ){
-//              return true;
-//           }//end of if
-//
-//     }//end of for
-//
-//   // for (e = list_begin (&lock_list); e != list_end (&lock_list);
-//   //      e = list_next (e))
-//   //   {
-//   //     struct thread *cur = list_entry (e, struct thread, elem);
-//   //     if(temp->tid == cur->tid ){
-//   //         return true;
-//   //     }
-//   //   }//end of for
-//     return false;
-// }
-
-
-
-// bool lock_list_remove(struct thread *t){
-//
-//   if(check_lock_list(t)){
-//     enum intr_level old_level;
-//     old_level = intr_disable ();
-//
-//     list_remove(&t->lock_elem);
-//     intr_set_level (old_level);
-//     return true;
-//   }
-//   return false;
-// }
-
-/* priority donation sequence, after lock is released the thread returns to its old priority before the donationhappened */
 void
 priority_return(void){
-	//set the priority to the old priority
-	//release lock
-	//return priority
-	//lock_release(lock);
+
 	struct thread *cur = thread_current(); //set a current thread
 	cur->priority = cur->old_priority;
 	
